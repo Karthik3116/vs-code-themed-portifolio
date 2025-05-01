@@ -8,7 +8,9 @@ const Sidebar = ({ componentMap, openFile, activeTab }) => {
         <div className="font-semibold text-[#c9d1d9] tracking-wide">EXPLORER</div>
 
         <ul className="space-y-1">
-          {Object.keys(componentMap).map((file) => (
+          {Object.keys(componentMap)
+          .map((file) => (
+            
             <li
               key={file}
               onClick={() => openFile(file)}

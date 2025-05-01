@@ -47,7 +47,7 @@ const Projects = () => {
         {projects.map((project, index) => (
           <div
             key={index}
-            className="card bg-[#2a2a2a] text-white border border-gray-700 shadow-lg group transition-transform duration-300 hover:-translate-y-1"
+            className="card bg-[#2a2a2a] text-white border border-gray-700 shadow-lg group transition-transform duration-300 hover:-translate-y-1 rounded-lg"
           >
             <figure className="relative overflow-hidden">
               <img
@@ -67,7 +67,7 @@ const Projects = () => {
                 </a>
               </div>
             </figure>
-            <div className="card-body p-4">
+            <div className="card-body p-4  bg-[#007ACC] rounded-b-md">
               <h2 className="card-title">{project.title}</h2>
             </div>
           </div>
