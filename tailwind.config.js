@@ -26,11 +26,11 @@ export default {
           "base-200": "#1e1e1e",
           "base-300": "#3C3C3C",
           "info": "#3794ff",
-          "success": "#16825D",
+          "success": "#0e6641",  // Darker green
           "warning": "#dcdcaa",
           "error": "#f48771",
           "--rounded-box": "0.25rem",
-          "--rounded-btn": "0.25rem",
+          "--rounded-btn": "0.25rem"
         },
       },
       "light", "dark", "cupcake", "bumblebee", "emerald", "corporate",
