@@ -1,15 +1,38 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Code, Github, Linkedin, Mail, FileText } from "lucide-react";
-import {useApplySavedTheme} from "../utils/useTheme";
 
-// --- Single Source of Truth for Profile Data ---
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { TypeAnimation } from 'react-type-animation';
+import { Github, Linkedin, Mail, FileText } from "lucide-react";
+import { useApplySavedTheme } from "../utils/useTheme";
+import { AnimatePresence } from "framer-motion";
+// --- Developer Profile ---
+
+const typingSequence = [
+  'Full Stack Developer',
+  2000,
+  'AI/ML Enthusiast',
+  2000,
+  'Open Source Contributor',
+  2000,
+  'Tech Blogger',
+  2000,
+];
+
+const roles = [
+  "Full Stack Developer",
+  "AI/ML Enthusiast",
+  "Open Source Contributor",
+  "Remote Engineer @ Remotico",
+  "Lifelong Learner"
+];
+
+
 const developerProfile = {
   name: "Nitin Ranganath",
   role: "Full Stack Developer",
-  bio: "Building modern, user-centric web experiences.", // Slightly refined bio
+  bio: "Building modern, user-centric web experiences.",
   description:
-    "I specialize in crafting elegant and responsive web applications using modern technologies. My focus is on writing clean, maintainable code and designing intuitive user interfaces.", // Slightly expanded description
+    "I specialize in crafting elegant and responsive web applications using modern technologies. My focus is on writing clean, maintainable code and designing intuitive user interfaces.",
   skills: [
     "JavaScript (ES6+)",
     "React & Next.js",
@@ -18,46 +41,46 @@ const developerProfile = {
     "HTML5 & CSS3/SCSS",
     "Databases (SQL/NoSQL)",
     "Git & CI/CD",
-  ], // Added a few more common skills
+  ],
   links: {
     github: "https://github.com/nitinr",
     linkedin: "https://linkedin.com/in/nitinr",
-    email: "nitin.ranganath.dev@example.com", // Use a more descriptive placeholder email
-    // Add other links if needed, e.g., portfolio, twitter
+    email: "nitin.ranganath.dev@example.com",
   },
-  // Optional: Add project link or reference
-  projectsUrl: "/projects", // Example path for projects page/section
+  projectsUrl: "/projects",
 };
 
-// --- Function to Generate Code Lines Dynamically ---
+// --- Code Line Generator ---
 const generateCodeLines = (profile) => {
-  const lines = [
-    'const developer = {',
-    `  name: "${profile.name}",`,
-    `  role: "${profile.role}",`,
-    `  bio: "${profile.bio}",`,
-    '  skills: [',
-    ...profile.skills.map(skill => `    "${skill}",`),
-    '  ],',
-    '  links: {',
-    `    github: "${profile.links.github}",`,
-    `    linkedin: "${profile.links.linkedin}",`,
-    `    email: "${profile.links.email}"`,
-    '  }',
-    '};',
+  return [
+    <span key="open" className="text-base-content/60">const <span className="text-accent">developer</span> = {'{'}</span>,
+    <span key="name">  <span className="text-accent">name</span>: <span className="text-success">"{profile.name}"</span>,</span>,
+    <span key="role">  <span className="text-accent">role</span>: <span className="text-success">"{profile.role}"</span>,</span>,
+    <span key="bio">  <span className="text-accent">bio</span>: <span className="text-success">"{profile.bio}"</span>,</span>,
+    <span key="skills-head">  <span className="text-accent">skills</span>: [</span>,
+    ...profile.skills.map((skill, i) => (
+      <span key={`skill-${i}`}>    <span className="text-success">"{skill}"</span>,</span>
+    )),
+    <span key="skills-tail">  ],</span>,
+    <span key="links-head">  <span className="text-accent">links</span>: {'{'}</span>,
+    <span key="github">    <span className="text-accent">github</span>: <span className="text-success">"{profile.links.github}"</span>,</span>,
+    <span key="linkedin">    <span className="text-accent">linkedin</span>: <span className="text-success">"{profile.links.linkedin}"</span>,</span>,
+    <span key="email">    <span className="text-accent">email</span>: <span className="text-success">"{profile.links.email}"</span></span>,
+    <span key="links-tail">  {'}'}</span>,
+    <span key="close">{'}'}</span>,
   ];
-  return lines;
 };
+
 
 // --- Animation Variants ---
 const lineVariants = {
-  hidden: { opacity: 0, x: -15 }, // Slightly increased offset
+  hidden: { opacity: 0, x: -15 },
   visible: (i) => ({
     opacity: 1,
     x: 0,
     transition: {
-      delay: i * 0.08, // Keep the nice staggered delay
-      type: "spring", // Add a subtle spring effect
+      delay: i * 0.08,
+      type: "spring",
       stiffness: 100,
       damping: 12,
     },
@@ -66,37 +89,61 @@ const lineVariants = {
 
 const Home = () => {
   useApplySavedTheme();
-
   const codeLines = generateCodeLines(developerProfile);
+  const [highlightedIndex, setHighlightedIndex] = useState(null);
+
+
+  const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentRoleIndex((prevIndex) => (prevIndex + 1) % roles.length);
+    }, 3000); // Change every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+
+  // Trigger highlighting after animation is done
+  useEffect(() => {
+    let currentIndex = 0;
+
+    const totalAnimationTime = codeLines.length * 50; // ms
+    const highlightDelay = totalAnimationTime + 500; // small buffer
+
+    const timer = setTimeout(() => {
+      const interval = setInterval(() => {
+        setHighlightedIndex(currentIndex);
+        currentIndex++;
+
+        if (currentIndex >= codeLines.length) {
+          clearInterval(interval);
+        }
+      }, 1000); // Delay between each highlight
+    }, highlightDelay);
+
+    return () => clearTimeout(timer);
+  }, [codeLines]);
 
   const handleViewProjects = () => {
     console.log("Navigate to projects:", developerProfile.projectsUrl);
-    // Add navigation logic here, e.g., using react-router-dom:
-    // navigate(developerProfile.projectsUrl);
+    // Implement navigation using react-router if needed
   };
 
   return (
-    // Use min-h-screen to ensure it takes at least the full viewport height
     <div className="flex flex-col h-full bg-base-100">
-      {/* Header Bar */}
-      
-      
-
-      {/* Main Content Area */}
-      {/* Added items-center to vertically center content if page is short */}
       <main className="flex flex-1 p-4 md:p-6 lg:p-8 items-center">
-        <div className="flex flex-col md:flex-row w-full max-w-6xl mx-auto gap-6 md:gap-8"> {/* Added max-width and centering */}
+        <div className="flex flex-col md:flex-row w-full max-w-6xl mx-auto gap-6 md:gap-8">
 
-          {/* Animated Code Snippet Card */}
+          {/* --- Code Snippet --- */}
           <motion.section
             className="w-full md:w-1/2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <div className="text-base-content bg-base-300 p-4 sm:p-6 rounded-lg shadow-lg overflow-hidden h-full"> {/* Adjusted padding */}
-              {/* Added max-height and overflow-y-auto for very long code snippets */}
-              <pre className="font-mono text-xs sm:text-sm whitespace-pre-wrap overflow-y-auto max-h-[60vh] md:max-h-full custom-scrollbar"> {/* Added custom-scrollbar class possibility */}
+            <div className="text-base-content bg-base-300 p-4 sm:p-6 rounded-lg shadow-lg overflow-hidden h-full">
+              <pre className="font-mono text-xs sm:text-sm whitespace-pre-wrap overflow-y-auto max-h-[60vh] md:max-h-full custom-scrollbar">
                 {codeLines.map((line, index) => (
                   <motion.div
                     key={index}
@@ -104,10 +151,9 @@ const Home = () => {
                     initial="hidden"
                     animate="visible"
                     variants={lineVariants}
-                    className="block" // Use block instead of relying on whitespace-pre-wrap alone for layout
+                    className={`block px-1 py-0.5 transition-all duration-300 ${highlightedIndex === index ? "bg-primary/20 rounded" : ""
+                      }`}
                   >
-                    {/* Render line numbers (optional) */}
-                    {/* <span className="text-base-content/30 select-none pr-4">{index + 1}</span> */}
                     {line}
                   </motion.div>
                 ))}
@@ -115,61 +161,82 @@ const Home = () => {
             </div>
           </motion.section>
 
-          {/* Profile Information Card */}
+          {/* --- Profile Info --- */}
           <motion.section
             className="w-full md:w-1/2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            {/* Flex column and justify-between to push buttons/links down */}
-            <div className="bg-base-200 rounded-lg shadow-lg p-6 md:p-8 h-full flex flex-col justify-between"> {/* Slightly different bg for contrast */}
-              {/* Top Profile Info */}
+            <div className="bg-base-200 rounded-lg shadow-lg p-6 md:p-8 h-full flex flex-col justify-between">
               <div>
                 <h1 className="text-3xl lg:text-4xl font-bold text-base-content mb-1">
                   {developerProfile.name}
                 </h1>
-                <h2 className="text-xl lg:text-2xl text-primary mb-4 font-medium">
-                  {developerProfile.role}
+                {/* <h2 className="text-xl lg:text-2xl text-primary mb-4 font-medium">
+                  <TypeAnimation
+                    sequence={typingSequence}
+                    wrapper="span"
+                    speed={50}
+                    repeat={Infinity}
+                    cursor={true}
+                  />
+                </h2> */}
+
+
+                <h2 className="text-xl lg:text-2xl text-primary mb-4 font-medium h-[2.5rem] overflow-hidden relative">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={roles[currentRoleIndex]}
+                      initial={{ y: 30, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: -30, opacity: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="absolute"
+                    >
+                      {roles[currentRoleIndex]}
+                    </motion.div>
+                  </AnimatePresence>
                 </h2>
+
                 <p className="text-base-content/80 mb-6 leading-relaxed">
                   {developerProfile.description}
                 </p>
-                 {/* Displaying Skills (Optional Enhancement) */}
-                 <div className="mb-6">
-                    <h3 className="text-sm font-semibold text-base-content/60 uppercase mb-2">Skills</h3>
-                    <div className="flex flex-wrap gap-2">
-                        {developerProfile.skills.slice(0, 5).map(skill => ( // Show first 5 skills for brevity
-                            <span key={skill} className="badge badge-neutral text-xs">
-                                {skill}
-                            </span>
-                        ))}
-                        {developerProfile.skills.length > 5 && <span className="badge badge-ghost text-xs">...</span>}
-                    </div>
-                 </div>
+
+                <div className="mb-6">
+                  <h3 className="text-sm font-semibold text-base-content/60 uppercase mb-2">Skills</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {developerProfile.skills.slice(0, 5).map((skill) => (
+                      <span key={skill} className="badge badge-neutral text-xs">
+                        {skill}
+                      </span>
+                    ))}
+                    {developerProfile.skills.length > 5 && (
+                      <span className="badge badge-ghost text-xs">...</span>
+                    )}
+                  </div>
+                </div>
               </div>
 
-              {/* Bottom Actions & Links */}
               <div>
-                <div className="flex flex-wrap gap-3 mb-6"> {/* Slightly smaller gap */}
+                <div className="flex flex-wrap gap-3 mb-6">
                   <button
                     onClick={handleViewProjects}
-                    className="btn btn-primary btn-sm sm:btn-md" // Use DaisyUI button classes
+                    className="btn btn-primary btn-sm sm:btn-md"
                   >
                     <FileText size={16} className="mr-1" />
                     View Projects
                   </button>
-                  {/* Changed to an anchor tag for mailto link */}
                   <a
                     href={`mailto:${developerProfile.links.email}`}
-                    className="btn btn-outline btn-sm sm:btn-md" // DaisyUI outline button
+                    className="btn btn-outline btn-sm sm:btn-md"
                   >
                     <Mail size={16} className="mr-1" />
                     Contact Me
                   </a>
                 </div>
 
-                <div className="flex gap-5 items-center"> {/* Increased gap for social icons */}
+                <div className="flex gap-5 items-center">
                   <a
                     href={developerProfile.links.github}
                     target="_blank"
@@ -188,7 +255,7 @@ const Home = () => {
                   >
                     <Linkedin size={24} />
                   </a>
-                   <a
+                  <a
                     href={`mailto:${developerProfile.links.email}`}
                     aria-label="Send Email"
                     className="text-base-content/70 hover:text-primary transition-colors duration-200"
@@ -199,38 +266,10 @@ const Home = () => {
               </div>
             </div>
           </motion.section>
-
         </div>
       </main>
-
-      {/* Optional Footer */}
-      {/* <footer className="p-4 bg-base-300 text-base-content/60 text-center text-xs">
-        © {new Date().getFullYear()} {developerProfile.name}. All rights reserved.
-      </footer> */}
     </div>
   );
 };
 
 export default Home;
-
-// Add this to your tailwind.config.js or global CSS if you want custom scrollbars
-/*
-@layer utilities {
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 20px;
-    border: 2px solid transparent;
-    background-clip: content-box;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.3);
-  }
-}
-*/
