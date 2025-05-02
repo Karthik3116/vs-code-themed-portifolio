@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import Home from "./Home";
 import About from "./About";
-import Contact from "./Contact";
 import Projects from "./Projects";
+import Contact from "./Contact";
 import SettingsPage from "./SettingsPage"; // ✅ Import SettingsPage
 
 import TopBar from "../components/TopBar";
@@ -16,8 +16,8 @@ import LeftActivityBar from "../components/LeftActivityBar"; // ✅ Import
 const componentMap = {
   "Home.jsx": <Home />,
   "About.jsx": <About />,
-  "Contact.jsx": <Contact />,
   "Projects.jsx": <Projects />,
+  "Contact.jsx": <Contact />,
   "Settings.jsx": <SettingsPage />, // ✅ Add to component map
 };
 

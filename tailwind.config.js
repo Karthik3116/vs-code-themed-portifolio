@@ -12,6 +12,11 @@ export default {
   daisyui: {
     themes: [
       {
+        fontFamily: {
+          sans: ['Inter', 'sans-serif'],
+        },
+      },
+      {
         vscode: {
           "primary": "#007acc",
           "secondary": "#3C3C3C",
