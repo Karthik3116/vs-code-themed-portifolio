@@ -1,7 +1,7 @@
-
 import React from "react";
 import { motion } from "framer-motion";
 import { Code, Github, Linkedin, Mail, FileText } from "lucide-react";
+import {useApplySavedTheme} from "../utils/useTheme";
 
 // --- Single Source of Truth for Profile Data ---
 const developerProfile = {
@@ -65,6 +65,8 @@ const lineVariants = {
 };
 
 const Home = () => {
+  useApplySavedTheme();
+
   const codeLines = generateCodeLines(developerProfile);
 
   const handleViewProjects = () => {
@@ -77,10 +79,8 @@ const Home = () => {
     // Use min-h-screen to ensure it takes at least the full viewport height
     <div className="flex flex-col h-full bg-base-100">
       {/* Header Bar */}
-      <header className="flex items-center bg-base-300 text-base-content p-2 text-sm border-b border-base-200 sticky top-0 z-10">
-        <Code size={16} className="mr-2 flex-shrink-0" />
-        <span>{developerProfile.name.toLowerCase().replace(" ", ".")}.profile.js</span> {/* Dynamic filename */}
-      </header>
+      
+      
 
       {/* Main Content Area */}
       {/* Added items-center to vertically center content if page is short */}
