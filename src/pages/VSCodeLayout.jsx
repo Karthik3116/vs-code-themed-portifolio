@@ -52,7 +52,7 @@ const VSCodeLayout = () => {
           openFile={openFile}
           activeTab={activeTab}
         />
-        <div className="flex-1 flex flex-col bg-[#1e1e1e]">
+        <div className="flex-1 flex flex-col bg-base-100">
           <TabBar
             openTabs={openTabs}
             activeTab={activeTab}

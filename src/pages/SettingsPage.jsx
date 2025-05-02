@@ -1,7 +1,24 @@
+// import React from 'react';
+
+// const SettingsPage = () => {
+//   return (
+//     <div className="flex justify-center items-center h-full  text-white">
+//       <div className="text-center">
+//         <h1 className="text-3xl font-semibold mb-4">Settings</h1>
+//         <p className="text-lg">Here you can adjust your app settings.</p>
+//         {/* Add more settings elements here as needed */}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default SettingsPage;
+
 
 import React, { useEffect, useState } from "react";
 
 const themes = [
+  "vscode",
   "light", "dark", "cupcake", "bumblebee", "emerald", "corporate",
   "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden",
   "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black",

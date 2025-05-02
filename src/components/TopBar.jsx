@@ -1,29 +1,43 @@
+
+
 import React from "react";
 
 const TopBar = () => {
   return (
-    <div className="flex items-center px-4 py-2 bg-[#333] text-sm space-x-4">
-      <span>File</span>
-      <span>Edit</span>
-      <span>Selection</span>
-      <span>View</span>
-      <span>Go</span>
-      <span>Run</span>
-      <span>Terminal</span>
-      <span>Help</span>
+    <div>
+      <div className="flex items-center px-4 py-2 bg-base-300 text-base-content text-sm shadow-sm">
+        {/* Menu */}
+        <div className="flex space-x-4 shrink-0">
+          <span className="hover:text-primary cursor-pointer">File</span>
+          <span className="hover:text-primary cursor-pointer">Edit</span>
+          <span className="hover:text-primary cursor-pointer">Selection</span>
+          <span className="hover:text-primary cursor-pointer">View</span>
+          <span className="hover:text-primary cursor-pointer">Go</span>
+          <span className="hover:text-primary cursor-pointer">Run</span>
+          <span className="hover:text-primary cursor-pointer">Terminal</span>
+          <span className="hover:text-primary cursor-pointer">Help</span>
+        </div>
 
-      <div className="ml-auto flex items-center space-x-2">
-        <button className="hover:text-gray-400">&larr;</button>
-        <button className="hover:text-gray-400">&rarr;</button>
+        {/* Center Group */}
+        <div className="flex flex-1 justify-center items-center space-x-3">
+          <button className="hover:text-info text-base-content/70">&larr;</button>
+          <button className="hover:text-info text-base-content/70">&rarr;</button>
+
+          <div className="bg-base-200 px-2 py-1 rounded-md text-xs w-60">
+            <input
+              type="text"
+              placeholder="Search (Ctrl+P)"
+              className="w-full bg-transparent outline-none text-base-content placeholder-base-content/50"
+            />
+          </div>
+        </div>
+
+        {/* Optional Right Spacer */}
+        <div className="w-[200px]" />
       </div>
 
-      <div className="ml-4 bg-[#252526] px-2 py-1 rounded-md text-xs w-60">
-        <input
-          type="text"
-          placeholder="Search (Ctrl+P)"
-          className="w-full bg-transparent outline-none text-white placeholder-gray-400"
-        />
-      </div>
+      {/* Horizontal Divider */}
+      <hr className="border-t border-base-content/20" />
     </div>
   );
 };
