@@ -15,10 +15,10 @@ import LeftActivityBar from "../components/LeftActivityBar"; // ✅ Import
 
 const componentMap = {
   "Home.jsx": <Home />,
-  "About.jsx": <About />,
-  "Projects.jsx": <Projects />,
-  "Contact.jsx": <Contact />,
-  "Settings.jsx": <SettingsPage />, // ✅ Add to component map
+  "About.txt": <About />,
+  "Projects.zip": <Projects />,
+  "Contact.info": <Contact />,
+  "Settings": <SettingsPage />, // ✅ Add to component map
 };
 
 const VSCodeLayout = () => {
