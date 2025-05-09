@@ -21,31 +21,27 @@ const typingSequence = [
 const roles = [
   "Full Stack Developer",
   "AI/ML Enthusiast",
-  "Open Source Contributor",
-  "Remote Engineer @ Remotico",
-  "Lifelong Learner"
 ];
 
 
 const developerProfile = {
-  name: "Nitin Ranganath",
+  name: "Kartheek Kethavath",
   role: "Full Stack Developer",
   bio: "Building modern, user-centric web experiences.",
   description:
     "I specialize in crafting elegant and responsive web applications using modern technologies. My focus is on writing clean, maintainable code and designing intuitive user interfaces.",
   skills: [
+    "AI-ML",
     "JavaScript (ES6+)",
     "React & Next.js",
     "Node.js & Express",
-    "TypeScript",
-    "HTML5 & CSS3/SCSS",
-    "Databases (SQL/NoSQL)",
-    "Git & CI/CD",
+    "Databases (SQL,MONGO)",
+    "Flask",
   ],
   links: {
-    github: "https://github.com/nitinr",
-    linkedin: "https://linkedin.com/in/nitinr",
-    email: "nitin.ranganath.dev@example.com",
+    github: "https://github.com/Karthik3116",
+    linkedin: "www.linkedin.com/in/kethavathkartheek",
+    email: "karthik3116k@gmail.com",
   },
   projectsUrl: "/projects",
 };
@@ -220,20 +216,8 @@ const Home = () => {
 
               <div>
                 <div className="flex flex-wrap gap-3 mb-6">
-                  <button
-                    onClick={handleViewProjects}
-                    className="btn btn-primary btn-sm sm:btn-md"
-                  >
-                    <FileText size={16} className="mr-1" />
-                    View Projects
-                  </button>
-                  <a
-                    href={`mailto:${developerProfile.links.email}`}
-                    className="btn btn-outline btn-sm sm:btn-md"
-                  >
-                    <Mail size={16} className="mr-1" />
-                    Contact Me
-                  </a>
+
+
                 </div>
 
                 <div className="flex gap-5 items-center">
@@ -247,7 +231,7 @@ const Home = () => {
                     <Github size={24} />
                   </a>
                   <a
-                    href={developerProfile.links.linkedin}
+                    href={`https://${developerProfile.links.linkedin}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="LinkedIn Profile"
@@ -255,14 +239,9 @@ const Home = () => {
                   >
                     <Linkedin size={24} />
                   </a>
-                  <a
-                    href={`mailto:${developerProfile.links.email}`}
-                    aria-label="Send Email"
-                    className="text-base-content/70 hover:text-primary transition-colors duration-200"
-                  >
-                    <Mail size={24} />
-                  </a>
                 </div>
+
+
               </div>
             </div>
           </motion.section>
