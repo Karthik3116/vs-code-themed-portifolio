@@ -50,7 +50,9 @@ const projects = [
 
 const Projects = () => {
   return (
-    <div className="min-h-screen bg-base-100 text-base-content p-6">
+    <div className="min-h-screen bg-base-100 text-base-content p-6"
+          style={{ minHeight: "calc(100vh - 8rem)" }}
+    >
       <h1 className="text-4xl font-bold mb-12 text-center">
         <span className="text-primary">🚀 My Projects</span>
       </h1>
