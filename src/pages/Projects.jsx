@@ -7,7 +7,7 @@ const projects = [
     title: "Chat App",
     image: "./chat.png",
     description: "A real-time chat app using Socket.io and Node.js.",
-    github: "https://github.com/yourusername/portfolio-site",
+    github: "https://github.com/Karthik3116/fullstack-chat-app",
     live: "https://chat.karthik.top",
     tag: "Frontend",
   },
