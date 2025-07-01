@@ -6,6 +6,7 @@ import About from "./About";
 import Projects from "./Projects";
 import Contact from "./Contact";
 import SettingsPage from "./SettingsPage"; // ✅ Import SettingsPage
+import Profiles from "./Profiles";
 
 import TopBar from "../components/TopBar";
 import Sidebar from "../components/Sidebar";
@@ -19,6 +20,7 @@ const componentMap = {
   "Projects.zip": <Projects />,
   "Contact.info": <Contact />,
   "Settings": <SettingsPage />, // ✅ Add to component map
+  
 };
 
 const VSCodeLayout = () => {

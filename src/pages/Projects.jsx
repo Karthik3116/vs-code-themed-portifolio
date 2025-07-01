@@ -4,6 +4,22 @@ import { FaGithub } from "react-icons/fa";
 
 const projects = [
   {
+    title: "Bio Vault",
+    image: "./bio.png",
+    description: "A real-time chat app using Socket.io and Node.js.",
+    github: "https://github.com/Karthik3116/BioVault",
+    live: "https://bio-vault.karthik.top/",
+    tag: "Full Stack",
+  },
+  {
+    title: "ai X interview",
+    image: "./aix.png",
+    description: "An AI-powered mock interview platform simulating real-time technical interviews.",
+    github: "https://github.com/Karthik3116/aiXinterview",
+    live: "https://interview.karthik.top/",
+    tag: "AI",
+  },
+  {
     title: "Chat App",
     image: "./chat.png",
     description: "A real-time chat app using Socket.io and Node.js.",
@@ -12,11 +28,35 @@ const projects = [
     tag: "Frontend",
   },
   {
+    title: "Smart PDF Chat",
+    image: "./rag.png",
+    description: "A RAG-powered chatbot that allows users to query PDFs using natural language, leveraging LangChain, FAISS, and Gemini 1.5 Flash for real-time semantic search.",
+    github: "https://github.com/Karthik3116/RAG_BOT",
+    live: "https://grokbot.streamlit.app/",
+    tag: "AI/ML",
+  },
+  {
+    title: "CheXNet Report Generator",
+    image: "./chex.png",
+    description: "A deep learning model combining CNNs, GRUs, and Bahdanau Attention for generating medical reports from chest X-rays, evaluated with BLEU scores.",
+    github: "https://github.com/Karthik3116/Medical-Report-Generator",
+    live: "https://github.com/Karthik3116/Medical-Report-Generator",
+    tag: "Deep Learning, Transformer, Medical AI",
+  },
+  {
+    title: "EAMCET College Predictor",
+    image: "./colleg.png",
+    description: "A Flask-based web app that predicts colleges based on EAMCET rank and category, using Pandas for CSV data processing and dynamic filtering.",
+    github: "https://github.com/Karthik3116/eamcet-college-predictor",
+    live: "https://collegify.pythonanywhere.com/",
+    tag: "Data Science",
+  },
+  {
     title: "LawBot AI",
     image: "./law.png",
     description: "A legal chatbot web app using Flask, MongoDB, and Gemini API to provide general legal information based on Indian law. Includes user authentication, chat history, and dynamic response generation with Gemini 1.5 Flash.",
     github: "https://github.com/Karthik3116/legal_assistant",
-    tag: "Flask",
+    tag: "AI",
   },
   {
     title: "YouTube Summarizer & Chatbot",
@@ -26,22 +66,8 @@ const projects = [
     tag: "MERN + AI",
   },
   {
-    title: "Blog Platform",
-    image: "/images/blog-platform.png",
-    description: "A markdown-based blog platform with authentication.",
-    github: "https://github.com/yourusername/blog-platform",
-    tag: "Fullstack",
-  },
-  {
-    title: "E-commerce Store",
-    image: "/images/ecommerce-store.png",
-    description: "An online store built with React, Redux, and Stripe.",
-    github: "https://github.com/yourusername/ecommerce-store",
-    tag: "E-commerce",
-  },
-  {
     title: "portfolio",
-    image: "/images/chat-app.png",
+    image: "/portf.png",
     description: "portfolio website built using React and Tailwind CSS.",
     github: "https://github.com/yourusername/chat-app",
     tag: "Real-time",
