@@ -1,180 +1,154 @@
 import React, { useState, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Loader2, AlertCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
+import { Loader2, AlertCircle, Star, GitBranch, MapPin, Link as LinkIcon } from 'lucide-react';
 
-const Profiles = () => {
-    const fixedUsername = "tanguturi_rajesh";
+const GitHubProfile = () => {
+  const username = 'Karthik3116';
 
-    const [currentUsername, setCurrentUsername] = useState(fixedUsername);
-    const [graphData, setGraphData] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [langData, setLangData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [theme, setTheme] = useState('dark');
 
-    // GraphQL query for LeetCode user contest ranking history
-    const LEETCODE_CONTEST_HISTORY_QUERY = `
-        query userContestRankingHistory($username: String!) {
-            userContestRankingHistory(username: $username) {
-                attended
-                rating
-                ranking
-                problemsSolved
-                contest {
-                    title
-                    startTime
-                }
-            }
-        }
-    `;
-
-    const fetchContestHistory = async (user) => {
-        setLoading(true);
-        setError(null);
-        setGraphData([]);
-
-        const graphqlEndpoint = "https://leetcode.com/graphql";
-
-        try {
-            const response = await fetch(graphqlEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    query: LEETCODE_CONTEST_HISTORY_QUERY,
-                    variables: { username: user },
-                }),
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            const result = await response.json();
-
-            if (result.errors) {
-                // Handle GraphQL errors
-                throw new Error(result.errors.map(err => err.message).join(', '));
-            }
-
-            const data = result.data;
-
-            if (data && data.userContestRankingHistory) {
-                const processedData = data.userContestRankingHistory
-                    .filter(entry => entry.attended && entry.rating > 0) // Filter for attended contests with valid ratings
-                    .map((entry, index) => ({
-                        // You can adjust the 'name' based on contest title if available and unique
-                        name: entry.contest?.title || `Contest ${index + 1}`,
-                        rating: entry.rating,
-                        ranking: entry.ranking,
-                        problemsSolved: entry.problemsSolved,
-                    }));
-
-                if (processedData.length === 0) {
-                    setError(`No valid attended contest rating data found for '${user}'. This could mean the user has not participated in rated contests, or the data is not available.`);
-                }
-                setGraphData(processedData);
-            } else {
-                setError(`Unexpected GraphQL response structure for '${user}'.`);
-            }
-        } catch (err) {
-            console.error("Failed to fetch contest history:", err);
-            setError(`Failed to fetch data for '${user}': ${err.message}.`);
-        } finally {
-            setLoading(false);
-        }
+  useEffect(() => {
+    const updateTheme = () => {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      setTheme(current);
     };
+    updateTheme();
+    const obs = new MutationObserver(updateTheme);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => obs.disconnect();
+  }, []);
 
-    useEffect(() => {
-        fetchContestHistory(fixedUsername);
-    }, []);
+  useEffect(() => {
+    const fetchAll = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const [userRes, reposRes] = await Promise.all([
+          fetch(`https://api.github.com/users/${username}`),
+          fetch(`https://api.github.com/users/${username}/repos?per_page=100`)
+        ]);
+        if (!userRes.ok) throw new Error(`Profile load failed (${userRes.status})`);
+        if (!reposRes.ok) throw new Error(`Repos load failed (${reposRes.status})`);
+        const [userJson, reposJson] = await Promise.all([userRes.json(), reposRes.json()]);
+        const langCount = {};
+        reposJson.forEach(r => r.language && (langCount[r.language] = (langCount[r.language]||0)+1));
+        setProfile(userJson);
+        setLangData(Object.entries(langCount).map(([name,count]) => ({name,count})).sort((a,b)=>b.count-a.count));
+      } catch(err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAll();
+  }, []);
 
-    return (
-        <div
-            className="bg-base-100 text-base-content px-4 py-10 font-sans overflow-y-auto custom-scrollbar"
-            style={{
-                height: "calc(100vh - 7.8rem)",
-            }}
-        >
-            <div className="max-w-6xl mx-auto space-y-8">
-                {/* Header */}
-                <div className="text-center">
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary">
-                        LeetCode Profiles
-                    </h1>
-                    <p className="text-base-content/70 mt-4 text-lg sm:text-xl">
-                        Displaying contest rating history for {currentUsername}.
-                    </p>
-                </div>
+  const chartColors = theme === 'light' ?
+    { bg: '#fff', text: '#333', grid: '#ddd', line: '#8884d8' } :
+    { bg: '#1e1e1e', text: '#fff', grid: '#444', line: '#8884d8' };
 
-                {/* Graph Display Section */}
-                <section className="bg-base-200 border border-base-300 rounded-xl p-6 sm:p-8 shadow min-h-[400px] flex items-center justify-center">
-                    {loading && (
-                        <div className="flex flex-col items-center text-primary">
-                            <Loader2 className="animate-spin w-10 h-10 mb-4" />
-                            <p className="text-lg">Loading contest data for {currentUsername}...</p>
-                        </div>
-                    )}
+  if (loading) return (
+    <div className="flex flex-col items-center justify-center min-h-[50vh] py-20">
+      <Loader2 className="animate-spin w-12 h-12 text-primary" />
+      <p className="mt-4 text-lg text-primary">Loading...</p>
+    </div>
+  );
+  if (error) return (
+    <div className="flex flex-col items-center justify-center min-h-[50vh] py-20 text-error">
+      <AlertCircle className="w-12 h-12 mb-4" />
+      <p className="text-lg">Error: {error}</p>
+      <button onClick={()=>window.location.reload()} className="mt-4 btn btn-primary">Retry</button>
+    </div>
+  );
 
-                    {error && (
-                        <div className="flex flex-col items-center text-error">
-                            <AlertCircle className="w-10 h-10 mb-4" />
-                            <p className="text-lg text-center">{error}</p>
-                            <p className="text-sm text-base-content/70 mt-2">
-                                Please ensure the username is correct or try a different one.
-                            </p>
-                        </div>
-                    )}
+  return (
+    <div className="w-full bg-base-100 text-base-content">
+      <div className="max-w-3xl mx-auto p-6 space-y-12">
 
-                    {!loading && !error && graphData.length > 0 && (
-                        <div className="w-full h-[500px]">
-                            <h2 className="text-2xl font-semibold text-primary mb-6 text-center">
-                                Rating History for {currentUsername}
-                            </h2>
-                            <ResponsiveContainer width="100%" height="100%">
-                                <LineChart
-                                    data={graphData}
-                                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#4a4a4a" />
-                                    {/* XAxis tick formatting to handle longer contest names if needed */}
-                                    <XAxis dataKey="name" stroke="#a0a0a0" tick={{ fill: '#a0a0a0', fontSize: 12 }} angle={-45} textAnchor="end" height={80} />
-                                    <YAxis stroke="#a0a0a0" tick={{ fill: '#a0a0a0', fontSize: 12 }} />
-                                    <Tooltip
-                                        contentStyle={{ backgroundColor: '#333', border: '1px solid #555', borderRadius: '8px' }}
-                                        labelStyle={{ color: '#fff' }}
-                                        itemStyle={{ color: '#fff' }}
-                                        formatter={(value, name, props) => {
-                                            if (name === 'rating') return [`Rating: ${value.toFixed(2)}`];
-                                            if (name === 'ranking') return [`Rank: ${value}`];
-                                            if (name === 'problemsSolved') return [`Problems Solved: ${value}`];
-                                            return [value, name];
-                                        }}
-                                    />
-                                    <Legend wrapperStyle={{ paddingTop: '20px', color: '#a0a0a0' }} />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="rating"
-                                        stroke="#8884d8"
-                                        activeDot={{ r: 8 }}
-                                        strokeWidth={2}
-                                    />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </div>
-                    )}
-
-                    {!loading && !error && graphData.length === 0 && (
-                        <div className="text-center text-base-content/70">
-                            <p className="text-lg">No rating data found for {currentUsername}.</p>
-                            <p className="text-sm text-base-content/70 mt-2">
-                                This could be due to a new user, or no attended rated contests.
-                            </p>
-                        </div>
-                    )}
-                </section>
+        {/* Profile Header */}
+        <section className="flex flex-col sm:flex-row items-center gap-6">
+          <img src={profile.avatar_url} alt={profile.login}
+            className="w-24 h-24 rounded-full border-2 border-primary" />
+          <div className="text-center sm:text-left space-y-2">
+            <h1 className="text-3xl font-bold">{profile.name||profile.login}</h1>
+            {profile.bio && <p className="text-base-content/70">{profile.bio}</p>}
+            <div className="flex flex-wrap justify-center sm:justify-start gap-4 mt-2 text-sm">
+              {profile.location && <span className="inline-flex items-center gap-1"><MapPin size={14}/> {profile.location}</span>}
+              {profile.blog && <a href={profile.blog.startsWith('http')?profile.blog:`https://${profile.blog}`}
+                target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 hover:underline">
+                <LinkIcon size={14}/> Blog
+              </a>}
             </div>
+          </div>
+        </section>
+
+        {/* Key Stats */}
+        <section>
+          <h2 className="text-2xl font-semibold mb-4">Key Stats</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              {icon:<Star className="mx-auto mb-2 text-yellow-400"/>, value:profile.public_repos, label:'Repos'},
+              {icon:<GitBranch className="mx-auto mb-2 text-blue-400"/>, value:profile.followers, label:'Followers'},
+              {icon:<Star className="mx-auto mb-2 text-green-400"/>, value:profile.following, label:'Following'}
+            ].map((s,i)=>(
+              <motion.div key={i} className="p-4 bg-base-200 rounded-lg shadow text-center"
+                whileHover={{scale:1.03}} transition={{type:'spring',stiffness:300}}>
+                {s.icon}
+                <p className="text-lg font-semibold">{s.value}</p>
+                <p className="text-sm">{s.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Top Languages Chart */}
+        <section>
+          <h2 className="text-2xl font-semibold mb-4">Top Languages</h2>
+          {langData.length>0? (
+            <div className="w-full h-64 bg-base-200 p-4 rounded-lg">
+              <ResponsiveContainer>
+                <LineChart data={langData} margin={{top:10,right:30,left:20,bottom:5}}>
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid}/>
+                  <XAxis dataKey="name" tick={{fill:chartColors.text}}/>
+                  <YAxis allowDecimals={false} tick={{fill:chartColors.text}}/>
+                  <Tooltip contentStyle={{backgroundColor:chartColors.bg,borderColor:chartColors.grid}}/>
+                  <Legend />
+                  <Line type="monotone" dataKey="count" stroke={chartColors.line} strokeWidth={2}/>
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          ):(<p className="text-center text-base-content/70">No language data available</p>)}
+        </section>
+      </div>
+
+      {/* Full-width Contributions Calendar */}
+      <section className={`w-full ${theme==='light'?'bg-base-200':'bg-base-800'} py-8`}>  
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-2xl font-semibold mb-4 text-center">Contributions Calendar</h2>
+          <div className="overflow-auto rounded-lg">
+            <img src={`https://ghchart.rshah.org/${username}?border=${theme==='light'?'999999':'444444'}&color=99ff66&bg=${theme==='light'?'ffffff':'000000'}`} 
+                 alt="GitHub Contributions Calendar" 
+                 className="w-full h-auto filter contrast-200 brightness-125" />
+          </div>
         </div>
-    );
+      </section>
+    </div>
+  );
 };
 
-export default Profiles;
+export default GitHubProfile;
