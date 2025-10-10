@@ -1,734 +1,339 @@
 
-// // import React, { useEffect, useState } from "react";
-// // import { motion } from "framer-motion";
-// // import { TypeAnimation } from 'react-type-animation';
-// // import { Github, Linkedin, Mail, FileText } from "lucide-react";
-// // import { useApplySavedTheme } from "../utils/useTheme";
-// // import { AnimatePresence } from "framer-motion";
-// // // --- Developer Profile ---
-
-// // const typingSequence = [
-// //   'Full Stack Developer',
-// //   2000,
-// //   'AI/ML Enthusiast',
-// //   2000,
-// //   'Open Source Contributor',
-// //   2000,
-// //   'Tech Blogger',
-// //   2000,
-// // ];
-
-// // const roles = [
-// //   "Full Stack Developer",
-// //   "AI/ML Enthusiast",
-// // ];
-
-
-// // const developerProfile = {
-// //   name: "Kartheek Kethavath",
-// //   role: "Full Stack Developer",
-// //   bio: "Building modern, user-centric web experiences.",
-// //   description:
-// //     "I specialize in crafting elegant and responsive web applications using modern technologies. My focus is on writing clean, maintainable code and designing intuitive user interfaces.",
-// //   skills: [
-// //     "AI-ML",
-// //     "JavaScript (ES6+)",
-// //     "React & Next.js",
-// //     "Node.js & Express",
-// //     "Databases (SQL,MONGO)",
-// //     "Flask",
-// //   ],
-// //   links: {
-// //     github: "https://github.com/Karthik3116",
-// //     linkedin: "www.linkedin.com/in/kethavathkartheek",
-// //     email: "karthik3116k@gmail.com",
-// //   },
-// //   projectsUrl: "/projects",
-// // };
-
-// // // --- Code Line Generator ---
-// // const generateCodeLines = (profile) => {
-// //   return [
-// //     <span key="open" className="text-base-content/60">const <span className="text-accent">developer</span> = {'{'}</span>,
-// //     <span key="name">  <span className="text-accent">name</span>: <span className="text-success">"{profile.name}"</span>,</span>,
-// //     <span key="role">  <span className="text-accent">role</span>: <span className="text-success">"{profile.role}"</span>,</span>,
-// //     <span key="bio">  <span className="text-accent">bio</span>: <span className="text-success">"{profile.bio}"</span>,</span>,
-// //     <span key="skills-head">  <span className="text-accent">skills</span>: [</span>,
-// //     ...profile.skills.map((skill, i) => (
-// //       <span key={`skill-${i}`}>    <span className="text-success">"{skill}"</span>,</span>
-// //     )),
-// //     <span key="skills-tail">  ],</span>,
-// //     <span key="links-head">  <span className="text-accent">links</span>: {'{'}</span>,
-// //     <span key="github">    <span className="text-accent">github</span>: <span className="text-success">"{profile.links.github}"</span>,</span>,
-// //     <span key="linkedin">    <span className="text-accent">linkedin</span>: <span className="text-success">"{profile.links.linkedin}"</span>,</span>,
-// //     <span key="email">    <span className="text-accent">email</span>: <span className="text-success">"{profile.links.email}"</span></span>,
-// //     <span key="links-tail">  {'}'}</span>,
-// //     <span key="close">{'}'}</span>,
-// //   ];
-// // };
-
-
-// // // --- Animation Variants ---
-// // const lineVariants = {
-// //   hidden: { opacity: 0, x: -15 },
-// //   visible: (i) => ({
-// //     opacity: 1,
-// //     x: 0,
-// //     transition: {
-// //       delay: i * 0.08,
-// //       type: "spring",
-// //       stiffness: 100,
-// //       damping: 12,
-// //     },
-// //   }),
-// // };
-
-// // const Home = () => {
-// //   useApplySavedTheme();
-// //   const codeLines = generateCodeLines(developerProfile);
-// //   const [highlightedIndex, setHighlightedIndex] = useState(null);
-
-
-// //   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
-
-// //   useEffect(() => {
-// //     const interval = setInterval(() => {
-// //       setCurrentRoleIndex((prevIndex) => (prevIndex + 1) % roles.length);
-// //     }, 3000); // Change every 3 seconds
-
-// //     return () => clearInterval(interval);
-// //   }, []);
-
-
-// //   // Trigger highlighting after animation is done
-// //   useEffect(() => {
-// //     let currentIndex = 0;
-
-// //     const totalAnimationTime = codeLines.length * 50; // ms
-// //     const highlightDelay = totalAnimationTime + 500; // small buffer
-
-// //     const timer = setTimeout(() => {
-// //       const interval = setInterval(() => {
-// //         setHighlightedIndex(currentIndex);
-// //         currentIndex++;
-
-// //         if (currentIndex >= codeLines.length) {
-// //           clearInterval(interval);
-// //         }
-// //       }, 1000); // Delay between each highlight
-// //     }, highlightDelay);
-
-// //     return () => clearTimeout(timer);
-// //   }, [codeLines]);
-
-// //   const handleViewProjects = () => {
-// //     console.log("Navigate to projects:", developerProfile.projectsUrl);
-// //     // Implement navigation using react-router if needed
-// //   };
-
-// //   return (
-// //     <div className="flex flex-col h-full bg-base-100">
-// //       <main className="flex flex-1 p-4 md:p-6 lg:p-8 items-center">
-// //         <div className="flex flex-col md:flex-row w-full max-w-6xl mx-auto gap-6 md:gap-8">
-
-// //           {/* --- Code Snippet --- */}
-// //           <motion.section
-// //             className="w-full md:w-1/2"
-// //             initial={{ opacity: 0, y: 20 }}
-// //             animate={{ opacity: 1, y: 0 }}
-// //             transition={{ duration: 0.5, delay: 0.1 }}
-// //           >
-// //             <div className="text-base-content bg-base-300 p-4 sm:p-6 rounded-lg shadow-lg overflow-hidden h-full">
-// //               <pre className="font-mono text-xs sm:text-sm whitespace-pre-wrap overflow-y-auto max-h-[60vh] md:max-h-full custom-scrollbar">
-// //                 {codeLines.map((line, index) => (
-// //                   <motion.div
-// //                     key={index}
-// //                     custom={index}
-// //                     initial="hidden"
-// //                     animate="visible"
-// //                     variants={lineVariants}
-// //                     className={`block px-1 py-0.5 transition-all duration-300 ${highlightedIndex === index ? "bg-primary/20 rounded" : ""
-// //                       }`}
-// //                   >
-// //                     {line}
-// //                   </motion.div>
-// //                 ))}
-// //               </pre>
-// //             </div>
-// //           </motion.section>
-
-// //           {/* --- Profile Info --- */}
-// //           <motion.section
-// //             className="w-full md:w-1/2"
-// //             initial={{ opacity: 0, y: 20 }}
-// //             animate={{ opacity: 1, y: 0 }}
-// //             transition={{ duration: 0.5, delay: 0.2 }}
-// //           >
-// //             <div className="bg-base-200 rounded-lg shadow-lg p-6 md:p-8 h-full flex flex-col justify-between">
-// //               <div>
-// //                 <h1 className="text-3xl lg:text-4xl font-bold text-base-content mb-1">
-// //                   {developerProfile.name}
-// //                 </h1>
-// //                 {/* <h2 className="text-xl lg:text-2xl text-primary mb-4 font-medium">
-// //                   <TypeAnimation
-// //                     sequence={typingSequence}
-// //                     wrapper="span"
-// //                     speed={50}
-// //                     repeat={Infinity}
-// //                     cursor={true}
-// //                   />
-// //                 </h2> */}
-
-
-// //                 <h2 className="text-xl lg:text-2xl text-primary mb-4 font-medium h-[2.5rem] overflow-hidden relative">
-// //                   <AnimatePresence mode="wait">
-// //                     <motion.div
-// //                       key={roles[currentRoleIndex]}
-// //                       initial={{ y: 30, opacity: 0 }}
-// //                       animate={{ y: 0, opacity: 1 }}
-// //                       exit={{ y: -30, opacity: 0 }}
-// //                       transition={{ duration: 0.5 }}
-// //                       className="absolute"
-// //                     >
-// //                       {roles[currentRoleIndex]}
-// //                     </motion.div>
-// //                   </AnimatePresence>
-// //                 </h2>
-
-// //                 <p className="text-base-content/80 mb-6 leading-relaxed">
-// //                   {developerProfile.description}
-// //                 </p>
-
-// //                 <div className="mb-6">
-// //                   <h3 className="text-sm font-semibold text-base-content/60 uppercase mb-2">Skills</h3>
-// //                   <div className="flex flex-wrap gap-2">
-// //                     {developerProfile.skills.slice(0, 5).map((skill) => (
-// //                       <span key={skill} className="badge badge-neutral text-xs">
-// //                         {skill}
-// //                       </span>
-// //                     ))}
-// //                     {developerProfile.skills.length > 5 && (
-// //                       <span className="badge badge-ghost text-xs">...</span>
-// //                     )}
-// //                   </div>
-// //                 </div>
-// //               </div>
-
-// //               <div>
-// //                 <div className="flex flex-wrap gap-3 mb-6">
-
-
-// //                 </div>
-
-// //                 <div className="flex gap-5 items-center">
-// //                   <a
-// //                     href={developerProfile.links.github}
-// //                     target="_blank"
-// //                     rel="noopener noreferrer"
-// //                     aria-label="GitHub Profile"
-// //                     className="text-base-content/70 hover:text-primary transition-colors duration-200"
-// //                   >
-// //                     <Github size={24} />
-// //                   </a>
-// //                   <a
-// //                     href={`https://${developerProfile.links.linkedin}`}
-// //                     target="_blank"
-// //                     rel="noopener noreferrer"
-// //                     aria-label="LinkedIn Profile"
-// //                     className="text-base-content/70 hover:text-primary transition-colors duration-200"
-// //                   >
-// //                     <Linkedin size={24} />
-// //                   </a>
-// //                 </div>
-
-
-// //               </div>
-// //             </div>
-// //           </motion.section>
-// //         </div>
-// //       </main>
-// //     </div>
-// //   );
-// // };
-
-// // export default Home;
-
-
-// import React, { useEffect, useState } from "react";
-// import { motion } from "framer-motion";
-// import { TypeAnimation } from 'react-type-animation';
-// import { Github, Linkedin, Mail, FileText } from "lucide-react";
-// import { useApplySavedTheme } from "../utils/useTheme";
-// import { AnimatePresence } from "framer-motion";
-
-// // --- Developer Profile ---
-// const typingSequence = [
-//   'Full Stack Developer',
-//   2000,
-//   'AI/ML Enthusiast',
-//   2000,
-//   'Open Source Contributor',
-//   2000,
-//   'Tech Blogger',
-//   2000,
-// ];
-
-// const roles = [
-//   "Full Stack Developer",
-//   "AI/ML Enthusiast",
-// ];
-
-// const developerProfile = {
-//   name: "Kartheek Kethavath",
-//   role: "Full Stack Developer",
-//   bio: "Building modern, user-centric web experiences.",
-//   description:
-//     "I specialize in crafting elegant and responsive web applications using modern technologies. My focus is on writing clean, maintainable code and designing intuitive user interfaces.",
-//   skills: [
-//     "AI-ML",
-//     "JavaScript (ES6+)",
-//     "React & Next.js",
-//     "Node.js & Express",
-//     "Databases (SQL,MONGO)",
-//     "Flask",
-//   ],
-//   links: {
-//     github: "https://github.com/Karthik3116",
-//     linkedin: "www.linkedin.com/in/kethavathkartheek",
-//     email: "karthik3116k@gmail.com",
-//   },
-//   projectsUrl: "/projects",
-// };
-
-// // --- Code Line Generator ---
-// const generateCodeLines = (profile) => {
-//   return [
-//     // Increased opacity for structural code elements for better visibility
-//     <span key="open" className="text-base-content/80">const <span className="text-accent">developer</span> = {'{'}</span>,
-//     <span key="name">  <span className="text-accent">name</span>: <span className="text-success">"{profile.name}"</span>,</span>,
-//     <span key="role">  <span className="text-accent">role</span>: <span className="text-success">"{profile.role}"</span>,</span>,
-//     <span key="bio">  <span className="text-accent">bio</span>: <span className="text-success">"{profile.bio}"</span>,</span>,
-//     <span key="skills-head">  <span className="text-accent">skills</span>: [</span>,
-//     ...profile.skills.map((skill, i) => (
-//       <span key={`skill-${i}`}>    <span className="text-success">"{skill}"</span>,</span>
-//     )),
-//     <span key="skills-tail">  ],</span>,
-//     <span key="links-head">  <span className="text-accent">links</span>: {'{'}</span>,
-//     <span key="github">    <span className="text-accent">github</span>: <span className="text-success">"{profile.links.github}"</span>,</span>,
-//     <span key="linkedin">    <span className="text-accent">linkedin</span>: <span className="text-success">"{profile.links.linkedin}"</span>,</span>,
-//     <span key="email">    <span className="text-accent">email</span>: <span className="text-success">"{profile.links.email}"</span></span>,
-//     <span key="links-tail">  {'}'}</span>,
-//     <span key="close">{'}'}</span>,
-//   ];
-// };
-
-
-// // --- Animation Variants ---
-// const lineVariants = {
-//   hidden: { opacity: 0, x: -15 },
-//   visible: (i) => ({
-//     opacity: 1,
-//     x: 0,
-//     transition: {
-//       delay: i * 0.08,
-//       type: "spring",
-//       stiffness: 100,
-//       damping: 12,
-//     },
-//   }),
-// };
-
-// const Home = () => {
-//   useApplySavedTheme();
-//   const codeLines = generateCodeLines(developerProfile);
-//   const [highlightedIndex, setHighlightedIndex] = useState(null);
-
-
-//   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
-
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       setCurrentRoleIndex((prevIndex) => (prevIndex + 1) % roles.length);
-//     }, 3000); // Change every 3 seconds
-
-//     return () => clearInterval(interval);
-//   }, []);
-
-
-//   // Trigger highlighting after animation is done
-//   useEffect(() => {
-//     let currentIndex = 0;
-
-//     // Calculate approximate total animation time
-//     const totalAnimationTime = codeLines.length * 80; // Base delay 0.08s * 1000 = 80ms per line
-//     const highlightDelay = totalAnimationTime + 500; // small buffer
-
-//     const timer = setTimeout(() => {
-//       const interval = setInterval(() => {
-//         setHighlightedIndex(currentIndex);
-//         currentIndex++;
-
-//         if (currentIndex >= codeLines.length) {
-//           clearInterval(interval);
-//         }
-//       }, 1000); // Delay between each highlight
-//     }, highlightDelay);
-
-//     return () => clearTimeout(timer);
-//   }, [codeLines]);
-
-//   const handleViewProjects = () => {
-//     console.log("Navigate to projects:", developerProfile.projectsUrl);
-//     // Implement navigation using react-router if needed
-//   };
-
-//   return (
-//     <div className="flex flex-col h-full bg-base-100">
-//       <main className="flex flex-1 p-4 md:p-6 lg:p-8 items-center">
-//         <div className="flex flex-col md:flex-row w-full max-w-6xl mx-auto gap-6 md:gap-8">
-
-//           {/* --- Code Snippet --- */}
-//           <motion.section
-//             className="w-full md:w-1/2"
-//             initial={{ opacity: 0, y: 20 }}
-//             animate={{ opacity: 1, y: 0 }}
-//             transition={{ duration: 0.5, delay: 0.1 }}
-//           >
-//             <div className="text-base-content bg-base-300 p-4 sm:p-6 rounded-lg shadow-lg overflow-hidden h-full">
-//               <pre className="font-mono text-xs sm:text-sm whitespace-pre-wrap overflow-y-auto max-h-[60vh] md:max-h-full custom-scrollbar">
-//                 {codeLines.map((line, index) => (
-//                   <motion.div
-//                     key={index}
-//                     custom={index}
-//                     initial="hidden"
-//                     animate="visible"
-//                     variants={lineVariants}
-//                     className={`block px-1 py-0.5 transition-all duration-300 ${
-//                       highlightedIndex === index ? "bg-primary/20 rounded" : ""
-//                     }`}
-//                   >
-//                     {line}
-//                   </motion.div>
-//                 ))}
-//               </pre>
-//             </div>
-//           </motion.section>
-
-//           {/* --- Profile Info --- */}
-//           <motion.section
-//             className="w-full md:w-1/2"
-//             initial={{ opacity: 0, y: 20 }}
-//             animate={{ opacity: 1, y: 0 }}
-//             transition={{ duration: 0.5, delay: 0.2 }}
-//           >
-//             <div className="bg-base-200 rounded-lg shadow-lg p-6 md:p-8 h-full flex flex-col justify-between">
-//               <div>
-//                 <h1 className="text-3xl lg:text-4xl font-bold text-base-content mb-1">
-//                   {developerProfile.name}
-//                 </h1>
-//                 {/* <h2 className="text-xl lg:text-2xl text-primary mb-4 font-medium">
-//                   <TypeAnimation
-//                     sequence={typingSequence}
-//                     wrapper="span"
-//                     speed={50}
-//                     repeat={Infinity}
-//                     cursor={true}
-//                   />
-//                 </h2> */}
-
-
-//                 <h2 className="text-xl lg:text-2xl text-primary mb-4 font-medium h-[2.5rem] overflow-hidden relative">
-//                   <AnimatePresence mode="wait">
-//                     <motion.div
-//                       key={roles[currentRoleIndex]}
-//                       initial={{ y: 30, opacity: 0 }}
-//                       animate={{ y: 0, opacity: 1 }}
-//                       exit={{ y: -30, opacity: 0 }}
-//                       transition={{ duration: 0.5 }}
-//                       className="absolute"
-//                     >
-//                       {roles[currentRoleIndex]}
-//                     </motion.div>
-//                   </AnimatePresence>
-//                 </h2>
-
-//                 {/* Increased opacity for the main description text */}
-//                 <p className="text-base-content leading-relaxed mb-6">
-//                   {developerProfile.description}
-//                 </p>
-
-//                 <div className="mb-6">
-//                   {/* Increased opacity for the "Skills" heading */}
-//                   <h3 className="text-sm font-semibold text-base-content/80 uppercase mb-2">Skills</h3>
-//                   <div className="flex flex-wrap gap-2">
-//                     {developerProfile.skills.slice(0, 5).map((skill) => (
-//                       <span key={skill} className="badge badge-neutral text-xs">
-//                         {skill}
-//                       </span>
-//                     ))}
-//                     {developerProfile.skills.length > 5 && (
-//                       <span className="badge badge-ghost text-xs">...</span>
-//                     )}
-//                   </div>
-//                 </div>
-//               </div>
-
-//               <div>
-//                 <div className="flex flex-wrap gap-3 mb-6">
-//                   {/* Add project link buttons here if needed later */}
-//                 </div>
-
-//                 <div className="flex gap-5 items-center">
-//                   <a
-//                     href={developerProfile.links.github}
-//                     target="_blank"
-//                     rel="noopener noreferrer"
-//                     aria-label="GitHub Profile"
-//                      // Increased opacity for icons
-//                     className="text-base-content/90 hover:text-primary transition-colors duration-200"
-//                   >
-//                     <Github size={24} />
-//                   </a>
-//                   <a
-//                     href={`https://${developerProfile.links.linkedin}`} // Corrected template literal
-//                     target="_blank"
-//                     rel="noopener noreferrer"
-//                     aria-label="LinkedIn Profile"
-//                      // Increased opacity for icons
-//                     className="text-base-content/90 hover:text-primary transition-colors duration-200"
-//                   >
-//                     <Linkedin size={24} />
-//                   </a>
-//                   {/* Add Email and Resume links if needed */}
-//                    {/*
-//                    <a
-//                     href={`mailto:${developerProfile.links.email}`}
-//                     aria-label="Email"
-//                     className="text-base-content/90 hover:text-primary transition-colors duration-200"
-//                   >
-//                     <Mail size={24} />
-//                   </a>
-//                   <a
-//                      // Replace with actual resume link
-//                     href="/path/to/your/resume.pdf"
-//                     target="_blank"
-//                     rel="noopener noreferrer"
-//                     aria-label="Resume"
-//                     className="text-base-content/90 hover:text-primary transition-colors duration-200"
-//                   >
-//                     <FileText size={24} />
-//                   </a>
-//                    */}
-//                 </div>
-//               </div>
-//             </div>
-//           </motion.section>
-//         </div>
-//       </main>
-//     </div>
-//   );
-// };
-
 // export default Home;
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail } from "lucide-react";
-import { useApplySavedTheme } from "../utils/useTheme";
-import { AnimatePresence } from "framer-motion";
+import { Github, Linkedin, Mail, FileText, RefreshCw } from "lucide-react";
 
-const developerProfile = {
-  name: "Kartheek Kethavath",
-  role: "Full Stack Developer",
-  bio: "Building modern, user-centric web experiences.",
-  description:
-    "I specialize in crafting elegant and responsive web applications using modern technologies. My focus is on writing clean, maintainable code and designing intuitive user interfaces.",
-  skills: [
-    "AI-ML",
-    "JavaScript (ES6+)",
-    "React & Next.js",
-    "Node.js & Express",
-    "Databases (SQL,MONGO)",
-    "Flask",
-  ],
-  links: {
-    github: "https://github.com/Karthik3116",
-    linkedin: "https://www.linkedin.com/in/kethavathkartheek",
-    email: "mailto:karthik3116k@gmail.com",
-  }
-};
+/* -------------------
+   Typewriter: types raw source then renders line as HTML
+   ------------------- */
+const Typewriter = ({ lines = [], speed = 16, lineDelay = 200, startDelay = 500, onDone }) => {
+  const [renderedLines, setRenderedLines] = useState([]);
+  const [currentChars, setCurrentChars] = useState("");
+  const [isDone, setIsDone] = useState(false);
 
-const generateCodeLines = (profile) => {
-  return [
-    <span key="open" className="text-base-content/80">const <span className="text-accent">developer</span> = {'{'}</span>,
-    <span key="name">  <span className="text-accent">name</span>: <span className="text-success">"{profile.name}"</span>,</span>,
-    <span key="role">  <span className="text-accent">role</span>: <span className="text-success">"{profile.role}"</span>,</span>,
-    <span key="bio">  <span className="text-accent">bio</span>: <span className="text-success">"{profile.bio}"</span>,</span>,
-    <span key="skills-head">  <span className="text-accent">skills</span>: [</span>,
-    ...profile.skills.map((skill, i) => (
-      <span key={`skill-${i}`}>    <span className="text-success">"{skill}"</span>,</span>
-    )),
-    <span key="skills-tail">  ],</span>,
-    <span key="links-head">  <span className="text-accent">links</span>: {'{'}</span>,
-    <span key="github">    <span className="text-accent">github</span>: <span className="text-success">"{profile.links.github}"</span>,</span>,
-    <span key="linkedin">    <span className="text-accent">linkedin</span>: <span className="text-success">"{profile.links.linkedin}"</span>,</span>,
-    <span key="email">    <span className="text-accent">email</span>: <span className="text-success">"{profile.links.email}"</span></span>,
-    <span key="links-tail">  {'}'}</span>,
-    <span key="close">{'}'}</span>,
-  ];
-};
+  const intervalRef = useRef(null);
+  const timeoutRef = useRef(null);
+  const mountedRef = useRef(true);
 
-const lineVariants = {
-  hidden: { opacity: 0, x: -15 },
-  visible: (i) => ({
-    opacity: 1,
-    x: 0,
-    transition: {
-      delay: i * 0.08,
-      type: "spring",
-      stiffness: 100,
-      damping: 12,
-    },
-  }),
-};
-
-const Home = () => {
-  useApplySavedTheme();
-  const codeLines = generateCodeLines(developerProfile);
-  const [highlightedIndex, setHighlightedIndex] = useState(null);
-  const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
-  const roles = ["Full Stack Developer", "AI/ML Enthusiast"];
+  const escapeHtml = (unsafe) =>
+    unsafe
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentRoleIndex((prevIndex) => (prevIndex + 1) % roles.length);
-    }, 3000);
-    return () => clearInterval(interval);
+    mountedRef.current = true;
+    if (!lines || lines.length === 0) {
+      setIsDone(true);
+      onDone?.();
+      return;
+    }
+    timeoutRef.current = setTimeout(() => typeLineAt(0), startDelay);
+    return () => {
+      mountedRef.current = false;
+      clearInterval(intervalRef.current);
+      clearTimeout(timeoutRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    let currentIndex = 0;
-    const totalAnimationTime = codeLines.length * 80;
-    const highlightDelay = totalAnimationTime + 500;
+  const typeLineAt = (index) => {
+    clearInterval(intervalRef.current);
+    clearTimeout(timeoutRef.current);
 
-    const timer = setTimeout(() => {
-      const interval = setInterval(() => {
-        setHighlightedIndex(currentIndex);
-        currentIndex++;
-        if (currentIndex >= codeLines.length) {
-          clearInterval(interval);
-        }
-      }, 1000);
-    }, highlightDelay);
+    const rawHtml = lines[index] ?? "";
+    let charIndex = 0;
+    setCurrentChars("");
 
-    return () => clearTimeout(timer);
-  }, [codeLines]);
+    intervalRef.current = setInterval(() => {
+      if (!mountedRef.current) {
+        clearInterval(intervalRef.current);
+        return;
+      }
+
+      charIndex++;
+      const partial = rawHtml.slice(0, charIndex);
+      setCurrentChars(partial);
+
+      if (charIndex >= rawHtml.length) {
+        clearInterval(intervalRef.current);
+        timeoutRef.current = setTimeout(() => {
+          setRenderedLines((prev) => [...prev, rawHtml]);
+          const next = index + 1;
+          if (next < lines.length) {
+            setCurrentChars("");
+            timeoutRef.current = setTimeout(() => typeLineAt(next), lineDelay);
+          } else {
+            setCurrentChars("");
+            setIsDone(true);
+            onDone?.();
+          }
+        }, lineDelay);
+      }
+    }, speed);
+  };
 
   return (
-    <div className="flex flex-col h-full bg-base-100">
-      <main className="flex flex-1 p-4 md:p-6 lg:p-8 items-center">
-        <div className="flex flex-col md:flex-row w-full max-w-6xl mx-auto gap-6 md:gap-8">
-          <motion.section
-            className="w-full md:w-1/2"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            <div className="text-base-content bg-base-300 p-4 sm:p-6 rounded-lg shadow-lg overflow-hidden h-full">
-              <pre className="font-mono text-xs sm:text-sm whitespace-pre-wrap overflow-y-auto max-h-[60vh] md:max-h-full custom-scrollbar">
-                {codeLines.map((line, index) => (
-                  <motion.div
-                    key={index}
-                    custom={index}
-                    initial="hidden"
-                    animate="visible"
-                    variants={lineVariants}
-                    className={`block px-1 py-0.5 transition-all duration-300 ${
-                      highlightedIndex === index ? "bg-primary/20 rounded" : ""
-                    }`}
-                  >
-                    {line}
-                  </motion.div>
-                ))}
-              </pre>
-            </div>
-          </motion.section>
+    <pre className="whitespace-pre-wrap break-words text-sm font-mono min-h-[320px] max-h-[64vh] overflow-y-auto pb-4" aria-live="polite">
+      {renderedLines.map((htmlLn, i) => (
+        <div key={`rendered-${i}`} dangerouslySetInnerHTML={{ __html: htmlLn }} />
+      ))}
 
-          <motion.section
-            className="w-full md:w-1/2"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <div className="bg-base-200 rounded-lg shadow-lg p-6 md:p-8 h-full flex flex-col justify-between">
-              <div>
-                <h1 className="text-2xl lg:text-3xl font-bold text-base-content mb-1">
-                  {developerProfile.name}
-                </h1>
-                
-                <h2 className="text-xl lg:text-xl text-primary mb-4 font-medium h-[2.5rem] overflow-hidden relative">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={roles[currentRoleIndex]}
-                      initial={{ y: 30, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      exit={{ y: -30, opacity: 0 }}
-                      transition={{ duration: 0.5 }}
-                      className="absolute"
-                    >
-                      {roles[currentRoleIndex]}
-                    </motion.div>
-                  </AnimatePresence>
-                </h2>
+      {!isDone && (
+        <div
+          dangerouslySetInnerHTML={{
+            __html: (currentChars ? escapeHtml(currentChars) : "&nbsp;") + '<span class="inline-block animate-blink ml-1">|</span>',
+          }}
+        />
+      )}
 
-                <p className="text-base-content leading-relaxed mb-6">
-                  {developerProfile.description}
-                </p>
+      <style>{`
+        .animate-blink { animation: blink 1s steps(1) infinite; }
+        @keyframes blink { 50% { opacity: 0 } }
+      `}</style>
+    </pre>
+  );
+};
 
-                <div className="mb-6">
-                  <h3 className="text-sm font-semibold text-base-content/80 uppercase mb-2">Skills</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {developerProfile.skills.slice(0, 5).map((skill) => (
-                      <span key={skill} className="badge badge-neutral text-xs">
-                        {skill}
-                      </span>
-                    ))}
-                    {developerProfile.skills.length > 5 && (
-                      <span className="badge badge-ghost text-xs">...</span>
-                    )}
-                  </div>
-                </div>
-              </div>
+/* -------------------
+   Minimal PDF modal (old-school viewer)
+   ------------------- */
+const ResumeModal = ({ open, onClose, src = "/resume.pdf" }) => {
+  const [loading, setLoading] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState(null);
+  const [error, setError] = useState(null);
+  const [zoom, setZoom] = useState(1);
+  const controllerRef = useRef(null);
 
-              <div>
-                <div className="flex gap-5 items-center">
-                  <a
-                    href={developerProfile.links.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-base-content/90 hover:text-primary transition-colors duration-200"
-                  >
-                    <Github size={24} />
-                  </a>
-                  <a
-                    href={developerProfile.links.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-base-content/90 hover:text-primary transition-colors duration-200"
-                  >
-                    <Linkedin size={24} />
-                  </a>
-                  <a
-                    href={developerProfile.links.email}
-                    className="text-base-content/90 hover:text-primary transition-colors duration-200"
-                  >
-                    <Mail size={24} />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </motion.section>
+  useEffect(() => {
+    if (!open) return;
+    setLoading(true);
+    setError(null);
+    setPdfUrl(null);
+    setZoom(1);
+
+    controllerRef.current = new AbortController();
+    const signal = controllerRef.current.signal;
+
+    (async () => {
+      try {
+        const res = await fetch(src, { method: "GET", signal });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const ctype = res.headers.get("content-type") || "";
+        if (!ctype.includes("pdf")) throw new Error("Server did not return a PDF.");
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        setPdfUrl(url);
+      } catch (err) {
+        if (err.name === "AbortError") return;
+        setError(err.message || "Failed to load resume.");
+      } finally {
+        setLoading(false);
+      }
+    })();
+
+    return () => {
+      controllerRef.current?.abort();
+      if (pdfUrl) URL.revokeObjectURL(pdfUrl);
+    };
+  }, [open, src]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  const zoomIn = () => setZoom((z) => Math.min(2.5, +(z + 0.25).toFixed(2)));
+  const zoomOut = () => setZoom((z) => Math.max(0.5, +(z - 0.25).toFixed(2)));
+  const fit = () => setZoom(1);
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onMouseDown={onClose}>
+      <motion.div className="w-full max-w-4xl bg-base-100 rounded-lg shadow-2xl overflow-hidden" onMouseDown={(e) => e.stopPropagation()} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+        <div className="flex items-center justify-between px-3 py-2 border-b border-neutral/20">
+          <div className="flex items-center gap-3">
+            <FileText size={16} />
+            <div className="font-medium">Resume — Kartheek Kethavath</div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {pdfUrl && (
+              <a href={pdfUrl} download="resume.pdf" className="btn btn-ghost btn-sm">
+                Download
+              </a>
+            )}
+            <button onClick={zoomOut} className="btn btn-ghost btn-sm" title="Zoom out">
+              <svg width="14" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M19 13H5V11H19V13Z" /></svg>
+            </button>
+            <button onClick={zoomIn} className="btn btn-ghost btn-sm" title="Zoom in">
+              <svg width="14" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
+            </button>
+            <button onClick={fit} className="btn btn-ghost btn-sm" title="Fit">
+              Fit
+            </button>
+            <button onClick={onClose} className="btn btn-ghost btn-sm">
+              Close
+            </button>
+          </div>
         </div>
-      </main>
+
+        <div className="h-[72vh] bg-[#0b0f12] flex items-stretch">
+          {loading && <div className="m-auto text-neutral/60">Loading resume…</div>}
+
+          {error && !loading && (
+            <div className="m-auto text-center p-6">
+              <div className="text-lg font-semibold mb-2">Cannot load resume</div>
+              <div className="text-sm text-neutral/60 mb-4">{error}</div>
+              <div className="flex justify-center gap-2">
+                <a href={src} target="_blank" rel="noreferrer" className="btn btn-primary btn-sm">Open / Download</a>
+                <button onClick={onClose} className="btn btn-ghost btn-sm">Close</button>
+              </div>
+            </div>
+          )}
+
+          {pdfUrl && (
+            <div className="w-full h-full overflow-auto bg-[#0b0f12] flex justify-center items-start p-4">
+              <div style={{ transform: `scale(${zoom})`, transformOrigin: "top left", width: `${100 / zoom}%` }}>
+                <iframe src={pdfUrl} title="Resume" style={{ width: "100%", height: "72vh", border: "none" }} />
+              </div>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
+/* -------------------
+   Home main component
+   ------------------- */
+const Home = () => {
+  const profileData = {
+    name: "Kartheek Kethavath",
+    role: "AI/ML Enthusiast",
+    bio:
+      "I specialize in crafting elegant and responsive web applications using modern technologies. My focus is on writing clean, maintainable code and designing intuitive user interfaces.",
+  };
+
+  const skillsData = ["AI/ML", "JavaScript (ES6+)", "React & Next.js", "Node.js & Express", "Databases (SQL, NoSQL)", "Python & Flask"];
+  const socialLinks = [
+    { icon: <Github size={18} />, href: "https://github.com/Karthik3116", label: "GitHub" },
+    { icon: <Linkedin size={18} />, href: "https://www.linkedin.com/in/kethavathkartheek", label: "LinkedIn" },
+    { icon: <Mail size={18} />, href: "mailto:karthik3116k@gmail.com", label: "Email" },
+  ];
+
+  const codeLines = [
+    `<span class="text-[#569cd6]">const</span> <span class="text-[#4ec9b0]">developer</span> = {`,
+    `  <span class="text-[#9cdcfe]">name</span>: <span class="text-[#ce9178]">'Kartheek Kethavath'</span>,`,
+    `  <span class="text-[#9cdcfe]">role</span>: <span class="text-[#ce9178]">'Full Stack Developer'</span>,`,
+    `  <span class="text-[#9cdcfe]">bio</span>: <span class="text-[#ce9178]">'Building modern, user-centric web experiences.'</span>,`,
+    `  <span class="text-[#9cdcfe]">skills</span>: [`,
+    `    <span class="text-[#ce9178]">'AI-ML'</span>,`,
+    `    <span class="text-[#ce9178]">'JavaScript (ES6+)'</span>,`,
+    `    <span class="text-[#ce9178]">'React & Next.js'</span>,`,
+    `    <span class="text-[#ce9178]">'Node.js & Express'</span>,`,
+    `    <span class="text-[#ce9178]">'Databases (SQL,MONGO)'</span>,`,
+    `  ],`,
+    `  <span class="text-[#9cdcfe]">links</span>: {`,
+    `    <span class="text-[#9cdcfe]">github</span>: <span class="text-[#ce9178]">'https://github.com/Karthik3116'</span>,`,
+    `    <span class="text-[#9cdcfe]">linkedin</span>: <span class="text-[#ce9178]">'https://linkedin.com/in/kethavathkartheek'</span>,`,
+    `  }`,
+    `};`,
+  ];
+
+  const [replayKey, setReplayKey] = useState(0);
+  const [resumeOpen, setResumeOpen] = useState(false);
+
+  return (
+    <div className="flex flex-col lg:flex-row items-stretch justify-center w-full min-h-screen p-4 md:p-8 gap-8 bg-gradient-to-b from-[#081018] to-[#0b0f12] text-base-content">
+      <motion.div className="w-full lg:w-1/2 bg-[#0d1114]/60 p-4 md:p-6 rounded-xl shadow-2xl border border-neutral/20 font-mono text-sm relative overflow-hidden" initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-red-500" />
+            <span className="w-3 h-3 rounded-full bg-yellow-400" />
+            <span className="w-3 h-3 rounded-full bg-green-400" />
+            <div className="ml-4 text-xs text-neutral/60 hidden sm:block">Home.jsx</div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button onClick={() => setReplayKey((k) => k + 1)} className="btn btn-ghost btn-sm gap-2">
+              <RefreshCw size={14} /> Replay
+            </button>
+
+            <button onClick={() => setResumeOpen(true)} className="btn btn-primary btn-sm gap-2">
+              <FileText size={14} /> View Resume
+            </button>
+          </div>
+        </div>
+
+        <div className="flex gap-4">
+          <div className="select-none pr-2 border-r border-neutral/20 hidden sm:block">
+            <ul className="text-xs text-neutral/50 leading-6">
+              {codeLines.map((_, i) => (
+                <li key={i} className="h-6 px-2">{i + 1}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="flex-1">
+            <div className="rounded-md p-3 bg-gradient-to-b from-[#061019] to-[#071018] shadow-inner" style={{ minHeight: 420 }}>
+              <Typewriter key={replayKey} lines={codeLines} speed={16} lineDelay={200} startDelay={500} />
+            </div>
+
+            <div className="mt-2 text-xs text-neutral/50 flex items-center gap-3">
+              <div className="px-2 py-1 rounded-md bg-neutral/10">UTF-8</div>
+              <div className="px-2 py-1 rounded-md bg-neutral/10">JSX</div>
+              <div className="ml-auto px-2 py-1 rounded-md bg-neutral/10">Ln 22, Col 18</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="absolute right-4 bottom-4 opacity-70 flex gap-3">
+          {socialLinks.map((s) => (
+            <a key={s.label} href={s.href} target="_blank" rel="noreferrer" className="p-2 rounded-full hover:bg-neutral/10" aria-label={s.label}>
+              {s.icon}
+            </a>
+          ))}
+        </div>
+      </motion.div>
+
+      <motion.div className="w-full lg:w-1/2 flex flex-col justify-center" initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.15 }}>
+        <div className="flex flex-col sm:flex-row items-center gap-4 mb-6 text-center sm:text-left">
+          <img src="/profile.png" alt={profileData.name} className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border-2 border-primary object-cover shadow-lg shrink-0" />
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-wide">{profileData.name}</h1>
+            <h2 className="text-lg sm:text-xl font-medium text-primary mt-1">{profileData.role}</h2>
+          </div>
+        </div>
+
+        <p className="text-muted mb-6 text-base leading-relaxed text-center sm:text-left">{profileData.bio}</p>
+
+        <h3 className="text-lg font-semibold mb-3">Skills</h3>
+        <div className="flex flex-wrap gap-2 mb-6">
+          {skillsData.map((skill) => (
+            <span key={skill} className="badge badge-outline py-2">{skill}</span>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-4 mt-auto justify-center sm:justify-start">
+          {socialLinks.map((link) => (
+            <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" title={link.label} className="p-3 bg-neutral/10 rounded-full hover:bg-primary hover:text-primary-content transition-colors duration-300">
+              {link.icon}
+            </a>
+          ))}
+        </div>
+      </motion.div>
+
+      <ResumeModal open={resumeOpen} onClose={() => setResumeOpen(false)} src="/resume.pdf" />
     </div>
   );
 };
