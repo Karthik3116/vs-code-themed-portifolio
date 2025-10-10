@@ -1,388 +1,231 @@
-// import React, { useState, useRef } from "react";
-// import emailjs from "@emailjs/browser";
 
-// // Toast helper
-// const showToast = (message, type = "success") => {
-//   const toast = document.getElementById("toast");
-//   if (toast) {
-//     const div = document.createElement("div");
-//     div.className = `alert ${type === "success" ? "alert-success" : "alert-error"} shadow-lg`;
-//     div.innerHTML = `<span>${message}</span>`;
-//     toast.appendChild(div);
-//     setTimeout(() => toast.removeChild(div), 4000); // auto-remove after 4 seconds
-//   }
-// };
-
-// const Contact = () => {
-//   const formRef = useRef();
-//   const [formData, setFormData] = useState({
-//     name: "",
-//     email: "",
-//     title: "",
-//     message: "",
-//   });
-
-//   const [sending, setSending] = useState(false);
-
-//   const handleChange = (e) => {
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     setSending(true);
-
-//     emailjs
-//       .sendForm(
-//         "service_9ehoned",
-//         "template_88ame3d",
-//         formRef.current,
-//         "loBVJC7wVRQhW1YcQ"
-//       )
-//       .then(
-//         () => {
-//           setSending(false);
-//           setFormData({ name: "", email: "", title: "", message: "" });
-//           showToast("✅ Message sent successfully!", "success");
-//         },
-//         (error) => {
-//           console.error(error);
-//           setSending(false);
-//           showToast("❌ Failed to send message. Please try again.", "error");
-//         }
-//       );
-//   };
-
-//   return (
-//     <div
-//       className="bg-base-100 text-base-content flex items-center justify-center flex-col"
-//       style={{ minHeight: "calc(100vh - 8rem)" }}
-//     >
-//       {/* Toast container (add one in your root layout too for global use) */}
-//       <div id="toast" className="toast toast-top toast-end z-50"></div>
-
-//       <div className="w-full max-w-2xl bg-base-300 p-8 rounded-2xl shadow-2xl mb-8">
-//         <h2 className="text-3xl font-bold text-center mb-8 text-primary">
-//           📬 Contact Me
-//         </h2>
-
-//         <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-//           <div className="form-control">
-//             <label className="label">
-//               <span className="label-text text-base-content">Name</span>
-//             </label>
-//             <input
-//               type="text"
-//               name="name"
-//               className="input input-bordered w-full"
-//               placeholder="John Doe"
-//               required
-//               value={formData.name}
-//               onChange={handleChange}
-//             />
-//           </div>
-
-//           <div className="form-control">
-//             <label className="label">
-//               <span className="label-text text-base-content">Email</span>
-//             </label>
-//             <input
-//               type="email"
-//               name="email"
-//               className="input input-bordered w-full"
-//               placeholder="john@example.com"
-//               required
-//               value={formData.email}
-//               onChange={handleChange}
-//             />
-//           </div>
-
-//           <div className="form-control">
-//             <label className="label">
-//               <span className="label-text text-base-content">Subject</span>
-//             </label>
-//             <input
-//               type="text"
-//               name="title"
-//               className="input input-bordered w-full"
-//               placeholder="Subject of your message"
-//               required
-//               value={formData.title}
-//               onChange={handleChange}
-//             />
-//           </div>
-
-//           <div className="form-control">
-//             <label className="label">
-//               <span className="label-text text-base-content">Message</span>
-//             </label>
-//             <textarea
-//               name="message"
-//               className="textarea textarea-bordered w-full h-32"
-//               placeholder="Your message here..."
-//               required
-//               value={formData.message}
-//               onChange={handleChange}
-//             />
-//           </div>
-
-//           <div className="text-center">
-//             <button
-//               type="submit"
-//               disabled={sending}
-//               className={`btn btn-primary px-8 text-lg transition-transform ${
-//                 sending ? "opacity-70 cursor-not-allowed" : "hover:scale-105"
-//               }`}
-//             >
-//               {sending ? "Sending..." : "Send ✉️"}
-//             </button>
-//           </div>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Contact;
-
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Rocket } from "lucide-react";
 import emailjs from "@emailjs/browser";
 
-// --- CONFIGURATION CONSTANTS ---
-const SUBMISSION_LIMIT = 3; // Max submissions allowed
-const TIME_WINDOW_MS = 60 * 60 * 1000; // 1 hour in milliseconds
-const MAX_LINKS = 2; // Max number of http links allowed in the message
-const MIN_MESSAGE_LENGTH = 15; // Minimum characters required for the message
+/* -------------------
+   CONFIGURATION
+------------------- */
+const SUBMISSION_LIMIT = 5; // max submissions per time window
+const TIME_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+const MAX_LINKS = 2;
+const MIN_MESSAGE_LENGTH = 15;
 
-// --- HELPER FUNCTIONS ---
-
-/**
- * Displays a toast notification.
- * @param {string} message - The message to show.
- * @param {'success' | 'error'} type - The type of toast.
- */
+/* -------------------
+   TOAST SYSTEM
+------------------- */
 const showToast = (message, type = "success") => {
   const toastContainer = document.getElementById("toast");
   if (toastContainer) {
     const div = document.createElement("div");
-    div.className = `alert ${type === "success" ? "alert-success" : "alert-error"} shadow-lg`;
+    div.className = `alert ${
+      type === "success" ? "alert-success" : "alert-error"
+    } shadow-lg`;
     div.innerHTML = `<span>${message}</span>`;
     toastContainer.appendChild(div);
     setTimeout(() => toastContainer.removeChild(div), 4000);
   }
 };
 
-/**
- * Checks if the user has exceeded the submission rate limit.
- * @returns {boolean} - True if the user is rate-limited, false otherwise.
- */
+/* -------------------
+   RATE LIMITER
+------------------- */
 const isRateLimited = () => {
-  try {
-    const submissions = JSON.parse(localStorage.getItem("formSubmissions") || "[]");
-    const now = Date.now();
-    
-    // Filter out submissions that are older than the time window
-    const recentSubmissions = submissions.filter(
-      (timestamp) => now - timestamp < TIME_WINDOW_MS
-    );
-    
-    if (recentSubmissions.length >= SUBMISSION_LIMIT) {
-      console.warn("Rate limit exceeded.");
-      return true;
-    }
-    
-    return false;
-  } catch (error) {
-    console.error("Could not check rate limit:", error);
-    return false; // Fail open if localStorage is inaccessible
-  }
+  const submissions = JSON.parse(localStorage.getItem("formSubmissions") || "[]");
+  const now = Date.now();
+  const recent = submissions.filter((t) => now - t < TIME_WINDOW_MS);
+  return recent.length >= SUBMISSION_LIMIT;
 };
-
-/**
- * Records a new successful submission timestamp.
- */
 const recordSubmission = () => {
-  try {
-    const submissions = JSON.parse(localStorage.getItem("formSubmissions") || "[]");
-    const now = Date.now();
-    const updatedSubmissions = [...submissions, now];
-    localStorage.setItem("formSubmissions", JSON.stringify(updatedSubmissions));
-  } catch (error) {
-    console.error("Could not record submission:", error);
-  }
+  const submissions = JSON.parse(localStorage.getItem("formSubmissions") || "[]");
+  submissions.push(Date.now());
+  localStorage.setItem("formSubmissions", JSON.stringify(submissions));
 };
 
-// --- COMPONENT ---
+/* -------------------
+   FORM STEPS
+------------------- */
+const steps = [
+  { id: "name", label: "What's your name?", type: "text", placeholder: "John Doe" },
+  { id: "email", label: "Your email address?", type: "email", placeholder: "john@example.com" },
+  { id: "title", label: "Subject of your message?", type: "text", placeholder: "Project Inquiry" },
+  { id: "message", label: "What would you like to say?", type: "textarea", placeholder: "Type your message..." },
+];
 
+/* -------------------
+   CONTACT COMPONENT
+------------------- */
 const Contact = () => {
-  const formRef = useRef();
+  const [step, setStep] = useState(0);
+  const [sending, setSending] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     title: "",
     message: "",
-    honeypot: "", // Hidden field for spam detection
+    honeypot: "", // Spam trap
   });
+  const [submitted, setSubmitted] = useState(false);
+  const formRef = useRef();
 
-  const [sending, setSending] = useState(false);
+  const handleChange = (e) =>
+    setFormData({ ...formData, [steps[step].id]: e.target.value });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
+  const handleNext = (e) => {
     e.preventDefault();
 
-    // 1. Honeypot Spam Check: If this field is filled, it's a bot.
     if (formData.honeypot) {
-      console.warn("Honeypot field filled. Likely a bot.");
-      // Deceptively show a success message to the bot
       showToast("✅ Message sent successfully!", "success");
-      return; 
+      return;
     }
-    
-    // 2. Content Spam Check
+
+    if (step === steps.length - 1) {
+      handleSubmit();
+    } else {
+      setStep((prev) => prev + 1);
+    }
+  };
+
+  const handleSubmit = () => {
+    // Content validation
     const linkCount = (formData.message.match(/https?:\/\//g) || []).length;
     if (linkCount > MAX_LINKS) {
-      showToast("❌ Your message contains too many links.", "error");
+      showToast("❌ Too many links in your message.", "error");
       return;
     }
     if (formData.message.length < MIN_MESSAGE_LENGTH) {
       showToast(`❌ Message must be at least ${MIN_MESSAGE_LENGTH} characters.`, "error");
       return;
     }
-
-    // 3. Rate Limiter Check
     if (isRateLimited()) {
-      showToast("❌ You are sending messages too quickly. Please try again later.", "error");
+      showToast("❌ Too many messages. Try again later.", "error");
       return;
     }
 
     setSending(true);
 
     emailjs
-      .sendForm(
-        "service_9ehoned",      // Your EmailJS Service ID
-        "template_88ame3d",     // Your EmailJS Template ID
-        formRef.current,
-        "loBVJC7wVRQhW1YcQ"       // Your EmailJS Public Key
+      .send(
+        "service_i4pqb8m",
+        "template_88ame3d",
+        formData,
+        "loBVJC7wVRQhW1YcQ"
       )
       .then(
         () => {
           setSending(false);
-          setFormData({ name: "", email: "", title: "", message: "", honeypot: "" });
+          setSubmitted(true);
+          recordSubmission();
           showToast("✅ Message sent successfully!", "success");
-          recordSubmission(); // Record the timestamp of successful submission
+          setFormData({ name: "", email: "", title: "", message: "", honeypot: "" });
         },
         (error) => {
           console.error("EMAILJS FAILED...", error);
           setSending(false);
-          showToast("❌ Failed to send message. Please try again.", "error");
+          showToast("❌ Failed to send message. Try again.", "error");
         }
       );
   };
 
   return (
-    <div
-      className="bg-base-100 text-base-content flex items-center justify-center flex-col p-4"
-      style={{ minHeight: "calc(100vh - 8rem)" }}
-    >
+    <div className="min-h-full flex flex-col justify-center items-center p-4 bg-base-100 text-base-content overflow-hidden">
+      {/* Toast container */}
       <div id="toast" className="toast toast-top toast-end z-50"></div>
 
-      <div className="w-full max-w-2xl bg-base-300 p-8 rounded-2xl shadow-2xl mb-8">
-        <h2 className="text-3xl font-bold text-center mb-8 text-primary">
-          📬 Contact Me
-        </h2>
+      {/* Form steps or success message */}
+      {!submitted ? (
+        <motion.div
+          key="form-container"
+          initial={{ y: 200, opacity: 0, rotate: -15 }}
+          animate={{ y: 0, opacity: 1, rotate: 0 }}
+          transition={{ duration: 0.8, type: "spring" }}
+          className="flex flex-col items-center text-center"
+        >
+          <Rocket
+            className="mb-8 text-primary animate-bounce drop-shadow-lg"
+            size={48}
+          />
 
-        <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text text-base-content">Name</span>
-            </label>
-            <input
-              type="text"
-              name="name"
-              className="input input-bordered w-full"
-              placeholder="John Doe"
-              required
-              value={formData.name}
-              onChange={handleChange}
-            />
-          </div>
-
-          {/* --- HONEYPOT FIELD (SPAM TRAP) --- */}
-          <div className="form-control" aria-hidden="true" style={{ position: 'absolute', left: '-5000px' }}>
-             <label className="label"><span className="label-text">Ignore this field</span></label>
-             <input 
-                type="text" 
-                name="honeypot" 
-                tabIndex="-1" 
-                autoComplete="off"
-                value={formData.honeypot}
-                onChange={handleChange}
-              />
-          </div>
-
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text text-base-content">Email</span>
-            </label>
-            <input
-              type="email"
-              name="email"
-              className="input input-bordered w-full"
-              placeholder="john@example.com"
-              required
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text text-base-content">Subject</span>
-            </label>
-            <input
-              type="text"
-              name="title"
-              className="input input-bordered w-full"
-              placeholder="Subject of your message"
-              required
-              value={formData.title}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text text-base-content">Message</span>
-            </label>
-            <textarea
-              name="message"
-              className="textarea textarea-bordered w-full h-32"
-              placeholder="Your message here..."
-              required
-              minLength={MIN_MESSAGE_LENGTH}
-              value={formData.message}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="text-center">
-            <button
-              type="submit"
-              disabled={sending}
-              className={`btn btn-primary px-8 text-lg transition-transform ${
-                sending ? "loading cursor-not-allowed" : "hover:scale-105"
-              }`}
+          <AnimatePresence mode="wait">
+            <motion.form
+              key={steps[step].id}
+              onSubmit={handleNext}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -40 }}
+              transition={{ duration: 0.5 }}
+              ref={formRef}
+              className="p-6 rounded-2xl bg-base-200/50 backdrop-blur-lg w-80 shadow-lg border border-base-content/10"
             >
-              {sending ? "Sending..." : "Send ✉️"}
-            </button>
+              <h1 className="text-xl font-semibold mb-4 text-base-content">
+                {steps[step].label}
+              </h1>
+
+              {steps[step].type === "textarea" ? (
+                <textarea
+                  name={steps[step].id}
+                  placeholder={steps[step].placeholder}
+                  value={formData[steps[step].id]}
+                  onChange={handleChange}
+                  className="textarea textarea-bordered w-full h-28"
+                  required
+                />
+              ) : (
+                <input
+                  type={steps[step].type}
+                  name={steps[step].id}
+                  placeholder={steps[step].placeholder}
+                  value={formData[steps[step].id]}
+                  onChange={handleChange}
+                  className="input input-bordered w-full"
+                  required
+                />
+              )}
+
+              <div className="mt-6">
+                <motion.button
+                  type="submit"
+                  disabled={sending}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`btn btn-primary w-full ${sending ? "btn-disabled" : ""}`}
+                >
+                  {step === steps.length - 1
+                    ? sending
+                      ? "Sending..."
+                      : "Send ✉️"
+                    : "Next 🚀"}
+                </motion.button>
+              </div>
+            </motion.form>
+          </AnimatePresence>
+
+          {/* Progress bar */}
+          <div className="mt-10 w-64 h-2 bg-base-content/20 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-primary"
+              initial={{ width: 0 }}
+              animate={{ width: `${((step + 1) / steps.length) * 100}%` }}
+              transition={{ duration: 0.5 }}
+            />
           </div>
-        </form>
-      </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          key="success-message"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center"
+        >
+          <Rocket className="text-success mx-auto mb-6 animate-pulse" size={64} />
+          <h1 className="text-3xl font-bold mb-4">Message Sent! 🚀</h1>
+          <p className="text-base-content/80">Thank you for reaching out. I’ll get back to you soon!</p>
+        </motion.div>
+      )}
     </div>
   );
 };
 
 export default Contact;
+

@@ -2,7 +2,7 @@
 // export default Home;
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail, FileText, RefreshCw } from "lucide-react";
+import { Github, Linkedin, Mail, FileText, RefreshCw, X } from "lucide-react";
 
 /* -------------------
    Typewriter: types raw source then renders line as HTML
@@ -38,7 +38,7 @@ const Typewriter = ({ lines = [], speed = 16, lineDelay = 200, startDelay = 500,
       clearTimeout(timeoutRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [lines]);
 
   const typeLineAt = (index) => {
     clearInterval(intervalRef.current);
@@ -99,48 +99,9 @@ const Typewriter = ({ lines = [], speed = 16, lineDelay = 200, startDelay = 500,
 };
 
 /* -------------------
-   Minimal PDF modal (old-school viewer)
+   Responsive PDF modal
    ------------------- */
 const ResumeModal = ({ open, onClose, src = "/resume.pdf" }) => {
-  const [loading, setLoading] = useState(false);
-  const [pdfUrl, setPdfUrl] = useState(null);
-  const [error, setError] = useState(null);
-  const [zoom, setZoom] = useState(1);
-  const controllerRef = useRef(null);
-
-  useEffect(() => {
-    if (!open) return;
-    setLoading(true);
-    setError(null);
-    setPdfUrl(null);
-    setZoom(1);
-
-    controllerRef.current = new AbortController();
-    const signal = controllerRef.current.signal;
-
-    (async () => {
-      try {
-        const res = await fetch(src, { method: "GET", signal });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const ctype = res.headers.get("content-type") || "";
-        if (!ctype.includes("pdf")) throw new Error("Server did not return a PDF.");
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        setPdfUrl(url);
-      } catch (err) {
-        if (err.name === "AbortError") return;
-        setError(err.message || "Failed to load resume.");
-      } finally {
-        setLoading(false);
-      }
-    })();
-
-    return () => {
-      controllerRef.current?.abort();
-      if (pdfUrl) URL.revokeObjectURL(pdfUrl);
-    };
-  }, [open, src]);
-
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => {
@@ -150,63 +111,35 @@ const ResumeModal = ({ open, onClose, src = "/resume.pdf" }) => {
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  const zoomIn = () => setZoom((z) => Math.min(2.5, +(z + 0.25).toFixed(2)));
-  const zoomOut = () => setZoom((z) => Math.max(0.5, +(z - 0.25).toFixed(2)));
-  const fit = () => setZoom(1);
-
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onMouseDown={onClose}>
-      <motion.div className="w-full max-w-4xl bg-base-100 rounded-lg shadow-2xl overflow-hidden" onMouseDown={(e) => e.stopPropagation()} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="flex items-center justify-between px-3 py-2 border-b border-neutral/20">
-          <div className="flex items-center gap-3">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4" onClick={onClose}>
+      <motion.div 
+        className="w-full max-w-4xl h-full max-h-[95vh] bg-base-100 rounded-lg shadow-2xl flex flex-col overflow-hidden" 
+        onClick={(e) => e.stopPropagation()} 
+        initial={{ opacity: 0, y: 20 }} 
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 20 }}
+      >
+        <div className="flex items-center justify-between px-2 sm:px-4 py-2 border-b border-neutral/20 shrink-0">
+          <div className="flex items-center gap-2">
             <FileText size={16} />
-            <div className="font-medium">Resume — Kartheek Kethavath</div>
+            <div className="font-medium text-sm sm:text-base">Resume</div>
           </div>
 
-          <div className="flex items-center gap-2">
-            {pdfUrl && (
-              <a href={pdfUrl} download="resume.pdf" className="btn btn-ghost btn-sm">
-                Download
-              </a>
-            )}
-            <button onClick={zoomOut} className="btn btn-ghost btn-sm" title="Zoom out">
-              <svg width="14" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M19 13H5V11H19V13Z" /></svg>
-            </button>
-            <button onClick={zoomIn} className="btn btn-ghost btn-sm" title="Zoom in">
-              <svg width="14" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
-            </button>
-            <button onClick={fit} className="btn btn-ghost btn-sm" title="Fit">
-              Fit
-            </button>
-            <button onClick={onClose} className="btn btn-ghost btn-sm">
+          <div className="flex items-center gap-1">
+            <a href={src} download="resume.pdf" className="btn btn-ghost btn-sm text-xs sm:text-sm">
+              Download
+            </a>
+            <button onClick={onClose} className="btn btn-ghost btn-sm text-xs sm:text-sm">
               Close
             </button>
           </div>
         </div>
 
-        <div className="h-[72vh] bg-[#0b0f12] flex items-stretch">
-          {loading && <div className="m-auto text-neutral/60">Loading resume…</div>}
-
-          {error && !loading && (
-            <div className="m-auto text-center p-6">
-              <div className="text-lg font-semibold mb-2">Cannot load resume</div>
-              <div className="text-sm text-neutral/60 mb-4">{error}</div>
-              <div className="flex justify-center gap-2">
-                <a href={src} target="_blank" rel="noreferrer" className="btn btn-primary btn-sm">Open / Download</a>
-                <button onClick={onClose} className="btn btn-ghost btn-sm">Close</button>
-              </div>
-            </div>
-          )}
-
-          {pdfUrl && (
-            <div className="w-full h-full overflow-auto bg-[#0b0f12] flex justify-center items-start p-4">
-              <div style={{ transform: `scale(${zoom})`, transformOrigin: "top left", width: `${100 / zoom}%` }}>
-                <iframe src={pdfUrl} title="Resume" style={{ width: "100%", height: "72vh", border: "none" }} />
-              </div>
-            </div>
-          )}
+        <div className="flex-grow bg-base-300">
+          <iframe src={src} title="Resume" className="w-full h-full border-none" />
         </div>
       </motion.div>
     </div>
@@ -252,58 +185,61 @@ const Home = () => {
 
   const [replayKey, setReplayKey] = useState(0);
   const [resumeOpen, setResumeOpen] = useState(false);
+  const [isCodeFinished, setIsCodeFinished] = useState(false);
+
+  const handleReplay = () => {
+    setIsCodeFinished(false);
+    setReplayKey(k => k + 1);
+  };
+
+  // **FIX:** This function now handles mobile vs. desktop for viewing the resume
+  const handleViewResume = () => {
+    // A simple check for mobile screen widths
+    const isMobile = window.innerWidth <= 768;
+
+    if (isMobile) {
+      // On mobile, open the PDF in a new tab for a better native experience
+      window.open("/resume.pdf", "_blank");
+    } else {
+      // On desktop, open the custom modal overlay
+      setResumeOpen(true);
+    }
+  };
 
   return (
-    <div className="flex flex-col lg:flex-row items-stretch justify-center w-full min-h-screen p-4 md:p-8 gap-8 bg-gradient-to-b from-[#081018] to-[#0b0f12] text-base-content">
-      <motion.div className="w-full lg:w-1/2 bg-[#0d1114]/60 p-4 md:p-6 rounded-xl shadow-2xl border border-neutral/20 font-mono text-sm relative overflow-hidden" initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
-        <div className="flex items-center justify-between mb-4">
+    <div className="flex flex-col lg:flex-row items-stretch justify-center w-full min-h-full p-4 md:p-8 gap-8">
+      <motion.div className="w-full lg:w-1/2 bg-base-300/50 rounded-xl shadow-2xl border border-base-content/10 font-mono text-sm flex flex-col overflow-hidden" initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
+        <div className="flex items-center justify-between px-4 py-2 bg-base-200 border-b border-base-content/10">
           <div className="flex items-center gap-2">
             <span className="w-3 h-3 rounded-full bg-red-500" />
             <span className="w-3 h-3 rounded-full bg-yellow-400" />
             <span className="w-3 h-3 rounded-full bg-green-400" />
-            <div className="ml-4 text-xs text-neutral/60 hidden sm:block">Home.jsx</div>
           </div>
-
-          <div className="flex items-center gap-2">
-            <button onClick={() => setReplayKey((k) => k + 1)} className="btn btn-ghost btn-sm gap-2">
-              <RefreshCw size={14} /> Replay
-            </button>
-
-            <button onClick={() => setResumeOpen(true)} className="btn btn-primary btn-sm gap-2">
-              <FileText size={14} /> View Resume
-            </button>
+          <div className="text-xs text-base-content/60">
+            src/components/Profile.jsx
           </div>
+          <button onClick={handleReplay} className="btn btn-ghost btn-xs gap-1">
+            <RefreshCw size={12} /> Replay
+          </button>
         </div>
-
-        <div className="flex gap-4">
-          <div className="select-none pr-2 border-r border-neutral/20 hidden sm:block">
-            <ul className="text-xs text-neutral/50 leading-6">
-              {codeLines.map((_, i) => (
-                <li key={i} className="h-6 px-2">{i + 1}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="flex-1">
-            <div className="rounded-md p-3 bg-gradient-to-b from-[#061019] to-[#071018] shadow-inner" style={{ minHeight: 420 }}>
-              <Typewriter key={replayKey} lines={codeLines} speed={16} lineDelay={200} startDelay={500} />
+        <div className="flex-grow p-4 overflow-hidden relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 opacity-50 animate-gradient-shift"></div>
+          <style>{`@keyframes gradient-shift { 0%, 100% { background-position: 0% 50% } 50% { background-position: 100% 50% } } .animate-gradient-shift { background-size: 200% 200%; animation: gradient-shift 12s ease infinite; }`}</style>
+          <div className="relative flex gap-4">
+            <div className="select-none text-right text-base-content/30">
+              {Array.from({ length: codeLines.length }, (_, i) => <div key={i}>{i + 1}</div>)}
             </div>
-
-            <div className="mt-2 text-xs text-neutral/50 flex items-center gap-3">
-              <div className="px-2 py-1 rounded-md bg-neutral/10">UTF-8</div>
-              <div className="px-2 py-1 rounded-md bg-neutral/10">JSX</div>
-              <div className="ml-auto px-2 py-1 rounded-md bg-neutral/10">Ln 22, Col 18</div>
+            <div className="flex-grow">
+              <Typewriter key={replayKey} lines={codeLines} onDone={() => setIsCodeFinished(true)} />
             </div>
           </div>
         </div>
-
-        <div className="absolute right-4 bottom-4 opacity-70 flex gap-3">
-          {socialLinks.map((s) => (
-            <a key={s.label} href={s.href} target="_blank" rel="noreferrer" className="p-2 rounded-full hover:bg-neutral/10" aria-label={s.label}>
-              {s.icon}
-            </a>
-          ))}
-        </div>
+        {isCodeFinished && (
+          <motion.div className="bg-base-100/70 border-t border-base-content/10 p-4" initial={{ height: 0 }} animate={{ height: 'auto' }} transition={{ duration: 0.5 }}>
+            <div className="text-xs text-green-400 mb-2">TERMINAL</div>
+            <Typewriter key={replayKey + '_terminal'} lines={[`<span class="text-green-400">$</span> npm run build`, ` `, `> portfolio@0.0.0 build`, `> vite build`, ` `, `vite v5.1.0 building for production...`, `✓ 35 modules transformed.`, `rendering chunks...`, `computing gzip size...`, ` `, `dist/index.html                  0.46 kB`, `dist/assets/index.css   5.33 kB │ gzip: 1.44 kB`, `dist/assets/index.js   81.27 kB │ gzip: 26.59 kB`, ` `, `<span class="text-green-400">✓</span> built in 782ms`]} speed={5} lineDelay={50} startDelay={100} />
+          </motion.div>
+        )}
       </motion.div>
 
       <motion.div className="w-full lg:w-1/2 flex flex-col justify-center" initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.15 }}>
@@ -315,21 +251,25 @@ const Home = () => {
           </div>
         </div>
 
-        <p className="text-muted mb-6 text-base leading-relaxed text-center sm:text-left">{profileData.bio}</p>
+        <p className="text-base-content/80 mb-6 text-base leading-relaxed text-center sm:text-left">{profileData.bio}</p>
 
         <h3 className="text-lg font-semibold mb-3">Skills</h3>
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div className="flex flex-wrap gap-2 mb-6 justify-center sm:justify-start">
           {skillsData.map((skill) => (
-            <span key={skill} className="badge badge-outline py-2">{skill}</span>
+            <span key={skill} className="badge badge-secondary badge-outline py-3">{skill}</span>
           ))}
         </div>
 
         <div className="flex items-center gap-4 mt-auto justify-center sm:justify-start">
           {socialLinks.map((link) => (
-            <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" title={link.label} className="p-3 bg-neutral/10 rounded-full hover:bg-primary hover:text-primary-content transition-colors duration-300">
+            <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" title={link.label} className="p-3 bg-base-200 rounded-full hover:bg-primary hover:text-primary-content transition-colors duration-300">
               {link.icon}
             </a>
           ))}
+          {/* **FIX:** The onClick handler is now updated */}
+          <button onClick={handleViewResume} className="btn btn-primary btn-outline flex items-center gap-2">
+            <FileText size={18} /> View Resume
+          </button>
         </div>
       </motion.div>
 
