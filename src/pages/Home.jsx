@@ -1,13 +1,11 @@
-
-// export default Home;
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail, FileText, RefreshCw, X } from "lucide-react";
+import { Github, Linkedin, Mail, FileText, RefreshCw } from "lucide-react";
 
 /* -------------------
    Typewriter: types raw source then renders line as HTML
    ------------------- */
-const Typewriter = ({ lines = [], speed = 16, lineDelay = 200, startDelay = 500, onDone }) => {
+const Typewriter = ({ lines = [], speed = 5, lineDelay = 200, startDelay = 500, onDone }) => {
   const [renderedLines, setRenderedLines] = useState([]);
   const [currentChars, setCurrentChars] = useState("");
   const [isDone, setIsDone] = useState(false);
@@ -146,43 +144,62 @@ const ResumeModal = ({ open, onClose, src = "/resume.pdf" }) => {
   );
 };
 
+// **FIX:** All constant data is moved outside the component.
+// This prevents it from being recreated on every render, which was causing the typewriter to restart.
+const profileData = {
+  name: "Kartheek Kethavath",
+  role: "AI/ML Enthusiast",
+  bio: "I specialize in crafting elegant and responsive web applications using modern technologies. My focus is on writing clean, maintainable code and designing intuitive user interfaces.",
+};
+
+const skillsData = ["AI/ML", "JavaScript (ES6+)", "React & Next.js", "Node.js & Express", "Databases (SQL, NoSQL)", "Python & Flask"];
+const socialLinks = [
+  { icon: <Github size={18} />, href: "https://github.com/Karthik3116", label: "GitHub" },
+  { icon: <Linkedin size={18} />, href: "https://www.linkedin.com/in/kethavathkartheek", label: "LinkedIn" },
+  { icon: <Mail size={18} />, href: "mailto:karthik3116k@gmail.com", label: "Email" },
+];
+
+const codeLines = [
+  `<span class="text-[#569cd6]">const</span> <span class="text-[#4ec9b0]">developer</span> = {`,
+  `  <span class="text-[#9cdcfe]">name</span>: <span class="text-[#ce9178]">'Kartheek Kethavath'</span>,`,
+  `  <span class="text-[#9cdcfe]">role</span>: <span class="text-[#ce9178]">'Full Stack Developer'</span>,`,
+  `  <span class="text-[#9cdcfe]">bio</span>: <span class="text-[#ce9178]">'Building modern, user-centric web experiences.'</span>,`,
+  `  <span class="text-[#9cdcfe]">skills</span>: [`,
+  `    <span class="text-[#ce9178]">'AI-ML'</span>,`,
+  `    <span class="text-[#ce9178]">'JavaScript (ES6+)'</span>,`,
+  `    <span class="text-[#ce9178]">'React & Next.js'</span>,`,
+  `    <span class="text-[#ce9178]">'Node.js & Express'</span>,`,
+  `    <span class="text-[#ce9178]">'Databases (SQL,MONGO)'</span>,`,
+  `  ],`,
+  `  <span class="text-[#9cdcfe]">links</span>: {`,
+  `    <span class="text-[#9cdcfe]">github</span>: <span class="text-[#ce9178]">'https://github.com/Karthik3116'</span>,`,
+  `    <span class="text-[#9cdcfe]">linkedin</span>: <span class="text-[#ce9178]">'https://linkedin.com/in/kethavathkartheek'</span>,`,
+  `  }`,
+  `};`,
+];
+
+const terminalLines = [
+  `<span class="text-green-400">$</span> npm run build`,
+  ` `,
+  `> portfolio@0.0.0 build`,
+  `> vite build`,
+  ` `,
+  `vite v5.1.0 building for production...`,
+  `✓ 35 modules transformed.`,
+  `rendering chunks...`,
+  `computing gzip size...`,
+  ` `,
+  `dist/index.html                  0.46 kB`,
+  `dist/assets/index.css   5.33 kB │ gzip: 1.44 kB`,
+  `dist/assets/index.js   81.27 kB │ gzip: 26.59 kB`,
+  ` `,
+  `<span class="text-green-400">✓</span> built in 782ms`
+];
+
 /* -------------------
    Home main component
    ------------------- */
 const Home = () => {
-  const profileData = {
-    name: "Kartheek Kethavath",
-    role: "AI/ML Enthusiast",
-    bio:
-      "I specialize in crafting elegant and responsive web applications using modern technologies. My focus is on writing clean, maintainable code and designing intuitive user interfaces.",
-  };
-
-  const skillsData = ["AI/ML", "JavaScript (ES6+)", "React & Next.js", "Node.js & Express", "Databases (SQL, NoSQL)", "Python & Flask"];
-  const socialLinks = [
-    { icon: <Github size={18} />, href: "https://github.com/Karthik3116", label: "GitHub" },
-    { icon: <Linkedin size={18} />, href: "https://www.linkedin.com/in/kethavathkartheek", label: "LinkedIn" },
-    { icon: <Mail size={18} />, href: "mailto:karthik3116k@gmail.com", label: "Email" },
-  ];
-
-  const codeLines = [
-    `<span class="text-[#569cd6]">const</span> <span class="text-[#4ec9b0]">developer</span> = {`,
-    `  <span class="text-[#9cdcfe]">name</span>: <span class="text-[#ce9178]">'Kartheek Kethavath'</span>,`,
-    `  <span class="text-[#9cdcfe]">role</span>: <span class="text-[#ce9178]">'Full Stack Developer'</span>,`,
-    `  <span class="text-[#9cdcfe]">bio</span>: <span class="text-[#ce9178]">'Building modern, user-centric web experiences.'</span>,`,
-    `  <span class="text-[#9cdcfe]">skills</span>: [`,
-    `    <span class="text-[#ce9178]">'AI-ML'</span>,`,
-    `    <span class="text-[#ce9178]">'JavaScript (ES6+)'</span>,`,
-    `    <span class="text-[#ce9178]">'React & Next.js'</span>,`,
-    `    <span class="text-[#ce9178]">'Node.js & Express'</span>,`,
-    `    <span class="text-[#ce9178]">'Databases (SQL,MONGO)'</span>,`,
-    `  ],`,
-    `  <span class="text-[#9cdcfe]">links</span>: {`,
-    `    <span class="text-[#9cdcfe]">github</span>: <span class="text-[#ce9178]">'https://github.com/Karthik3116'</span>,`,
-    `    <span class="text-[#9cdcfe]">linkedin</span>: <span class="text-[#ce9178]">'https://linkedin.com/in/kethavathkartheek'</span>,`,
-    `  }`,
-    `};`,
-  ];
-
   const [replayKey, setReplayKey] = useState(0);
   const [resumeOpen, setResumeOpen] = useState(false);
   const [isCodeFinished, setIsCodeFinished] = useState(false);
@@ -192,16 +209,11 @@ const Home = () => {
     setReplayKey(k => k + 1);
   };
 
-  // **FIX:** This function now handles mobile vs. desktop for viewing the resume
   const handleViewResume = () => {
-    // A simple check for mobile screen widths
     const isMobile = window.innerWidth <= 768;
-
     if (isMobile) {
-      // On mobile, open the PDF in a new tab for a better native experience
       window.open("/resume.pdf", "_blank");
     } else {
-      // On desktop, open the custom modal overlay
       setResumeOpen(true);
     }
   };
@@ -237,7 +249,7 @@ const Home = () => {
         {isCodeFinished && (
           <motion.div className="bg-base-100/70 border-t border-base-content/10 p-4" initial={{ height: 0 }} animate={{ height: 'auto' }} transition={{ duration: 0.5 }}>
             <div className="text-xs text-green-400 mb-2">TERMINAL</div>
-            <Typewriter key={replayKey + '_terminal'} lines={[`<span class="text-green-400">$</span> npm run build`, ` `, `> portfolio@0.0.0 build`, `> vite build`, ` `, `vite v5.1.0 building for production...`, `✓ 35 modules transformed.`, `rendering chunks...`, `computing gzip size...`, ` `, `dist/index.html                  0.46 kB`, `dist/assets/index.css   5.33 kB │ gzip: 1.44 kB`, `dist/assets/index.js   81.27 kB │ gzip: 26.59 kB`, ` `, `<span class="text-green-400">✓</span> built in 782ms`]} speed={5} lineDelay={50} startDelay={100} />
+            <Typewriter key={replayKey + '_terminal'} lines={terminalLines} speed={5} lineDelay={50} startDelay={100} />
           </motion.div>
         )}
       </motion.div>
@@ -266,7 +278,6 @@ const Home = () => {
               {link.icon}
             </a>
           ))}
-          {/* **FIX:** The onClick handler is now updated */}
           <button onClick={handleViewResume} className="btn btn-primary btn-outline flex items-center gap-2">
             <FileText size={18} /> View Resume
           </button>
