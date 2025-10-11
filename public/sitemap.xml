@@ -1,53 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset 
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
+                      http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
-  <!-- Home -->
+  <!-- Root URL -->
   <url>
     <loc>https://www.karthik.top/</loc>
-    <lastmod>2025-10-11</lastmod>
+    <lastmod>2025-10-11T12:00:00+05:30</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <priority>1.00</priority>
   </url>
 
-  <!-- About -->
+  <!-- About Page -->
   <url>
     <loc>https://www.karthik.top/about</loc>
-    <lastmod>2025-10-11</lastmod>
+    <lastmod>2025-10-11T12:00:00+05:30</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.90</priority>
   </url>
 
-  <!-- Projects -->
+  <!-- Projects Page -->
   <url>
     <loc>https://www.karthik.top/projects</loc>
-    <lastmod>2025-10-11</lastmod>
+    <lastmod>2025-10-11T12:00:00+05:30</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.95</priority>
   </url>
 
-  <!-- Contact -->
+  <!-- Contact Page -->
   <url>
     <loc>https://www.karthik.top/contact</loc>
-    <lastmod>2025-10-11</lastmod>
+    <lastmod>2025-10-11T12:00:00+05:30</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.85</priority>
   </url>
 
-  <!-- Profiles -->
+  <!-- Profiles Page -->
   <url>
     <loc>https://www.karthik.top/profiles</loc>
-    <lastmod>2025-10-11</lastmod>
+    <lastmod>2025-10-11T12:00:00+05:30</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.80</priority>
   </url>
 
-  <!-- Settings -->
+  <!-- Settings Page -->
   <url>
     <loc>https://www.karthik.top/settings</loc>
-    <lastmod>2025-10-11</lastmod>
+    <lastmod>2025-10-11T12:00:00+05:30</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.60</priority>
   </url>
 
 </urlset>

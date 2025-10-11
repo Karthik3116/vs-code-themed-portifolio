@@ -1,3 +1,4 @@
+// src/pages/Home.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Github, Linkedin, Mail, FileText, RefreshCw } from "lucide-react";
@@ -5,7 +6,7 @@ import { Github, Linkedin, Mail, FileText, RefreshCw } from "lucide-react";
 /* -------------------
    Typewriter: types raw source then renders line as HTML
    ------------------- */
-const Typewriter = ({ lines = [], speed = 5, lineDelay = 200, startDelay = 500, onDone }) => {
+const Typewriter = ({ lines = [], speed = 10, lineDelay = 200, startDelay = 500, onDone }) => {
   const [renderedLines, setRenderedLines] = useState([]);
   const [currentChars, setCurrentChars] = useState("");
   const [isDone, setIsDone] = useState(false);
@@ -152,7 +153,7 @@ const profileData = {
   bio: "I specialize in crafting elegant and responsive web applications using modern technologies. My focus is on writing clean, maintainable code and designing intuitive user interfaces.",
 };
 
-const skillsData = ["AI/ML", "JavaScript (ES6+)", "React & Next.js", "Node.js & Express", "Databases (SQL, NoSQL)", "Python & Flask"];
+const skillsData = ["AI/ML", "JavaScript ", "React", "Node.js & Express", "Databases (SQL, NoSQL)", "Python & Flask"];
 const socialLinks = [
   { icon: <Github size={18} />, href: "https://github.com/Karthik3116", label: "GitHub" },
   { icon: <Linkedin size={18} />, href: "https://www.linkedin.com/in/kethavathkartheek", label: "LinkedIn" },
@@ -200,23 +201,79 @@ const terminalLines = [
    Home main component
    ------------------- */
 const Home = () => {
+  // replayKey still allows manual replay on demand
   const [replayKey, setReplayKey] = useState(0);
-  const [resumeOpen, setResumeOpen] = useState(false);
+
+  // whether the code typing is finished (controls terminal reveal)
   const [isCodeFinished, setIsCodeFinished] = useState(false);
 
+  // resume modal
+  const [resumeOpen, setResumeOpen] = useState(false);
+
+  // Check sessionStorage to see if typing ran already in this tab session
+  // sessionStorage clears when tab/window is closed -> meets your requirement
+  const [hasPlayedSession, setHasPlayedSession] = useState(() => {
+    try {
+      return typeof window !== "undefined" && sessionStorage.getItem("home_typing_done") === "true";
+    } catch {
+      return false;
+    }
+  });
+
+  // When component mounts, if it already played in this session, immediately show final code/terminal
+  useEffect(() => {
+    if (hasPlayedSession) {
+      setIsCodeFinished(true);
+    }
+  }, [hasPlayedSession]);
+
+  // Replay handler: allows manual replay even if session flag says it already ran
   const handleReplay = () => {
+    // ensure terminal hidden until typing completes
     setIsCodeFinished(false);
-    setReplayKey(k => k + 1);
+    // increment key to remount Typewriter(s)
+    setReplayKey((k) => k + 1);
+  };
+
+  // Called when the code typewriter finishes (either auto-first-play or replay)
+  const onCodeTypingDone = () => {
+    // mark sessionStorage so we don't auto-play again within this tab
+    try {
+      sessionStorage.setItem("home_typing_done", "true");
+    } catch {}
+    setHasPlayedSession(true);
+    setIsCodeFinished(true);
   };
 
   const handleViewResume = () => {
-    const isMobile = window.innerWidth <= 768;
+    const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
     if (isMobile) {
       window.open("/resume.pdf", "_blank");
     } else {
       setResumeOpen(true);
     }
   };
+
+  // Helper to render the final code instantly (no animation) when session flag present
+  const renderFinalCode = () => (
+    <pre className="whitespace-pre-wrap break-words text-sm font-mono min-h-[320px] max-h-[64vh] overflow-y-auto pb-4">
+      {codeLines.map((ln, i) => (
+        <div key={`final-${i}`} dangerouslySetInnerHTML={{ __html: ln }} />
+      ))}
+    </pre>
+  );
+
+  // Helper to render final terminal instantly
+  const renderFinalTerminal = () => (
+    <div className="font-mono text-sm">
+      {terminalLines.map((l, i) => (
+        <div key={`t-final-${i}`} dangerouslySetInnerHTML={{ __html: l }} />
+      ))}
+    </div>
+  );
+
+  // open resume modal
+  const openResume = () => setResumeOpen(true);
 
   return (
     <div className="flex flex-col lg:flex-row items-stretch justify-center w-full min-h-full p-4 md:p-8 gap-8">
@@ -242,14 +299,37 @@ const Home = () => {
               {Array.from({ length: codeLines.length }, (_, i) => <div key={i}>{i + 1}</div>)}
             </div>
             <div className="flex-grow">
-              <Typewriter key={replayKey} lines={codeLines} onDone={() => setIsCodeFinished(true)} />
+              {/* Show Typewriter if it hasn't run this session OR user manually replayed (replayKey > 0) */}
+              {(!hasPlayedSession || replayKey > 0) ? (
+                // Use replayKey as React key so manual replay forces remount & retype
+                <Typewriter
+                  key={`type-${replayKey}`}
+                  lines={codeLines}
+                  onDone={onCodeTypingDone}
+                />
+              ) : (
+                // Already played during this tab session -> show final code instantly
+                renderFinalCode()
+              )}
             </div>
           </div>
         </div>
+
+        {/* Terminal / build section: show after code finishes */}
         {isCodeFinished && (
           <motion.div className="bg-base-100/70 border-t border-base-content/10 p-4" initial={{ height: 0 }} animate={{ height: 'auto' }} transition={{ duration: 0.5 }}>
             <div className="text-xs text-green-400 mb-2">TERMINAL</div>
-            <Typewriter key={replayKey + '_terminal'} lines={terminalLines} speed={5} lineDelay={50} startDelay={100} />
+
+            {/* If user replayed (replayKey>0) then show animated terminal keyed to replayKey,
+                otherwise if session already played show final terminal instantly */}
+            {replayKey > 0 ? (
+              <Typewriter key={`term-${replayKey}`} lines={terminalLines} speed={5} lineDelay={50} startDelay={100} />
+            ) : hasPlayedSession ? (
+              renderFinalTerminal()
+            ) : (
+              // first time auto-play (replayKey === 0 and not hasPlayedSession) -> animated terminal
+              <Typewriter key={`term-auto`} lines={terminalLines} speed={5} lineDelay={50} startDelay={100} />
+            )}
           </motion.div>
         )}
       </motion.div>
