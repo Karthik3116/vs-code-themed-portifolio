@@ -137,6 +137,7 @@ const ResumeModal = ({ open, onClose, src = "/resume.pdf" }) => {
           </div>
         </div>
 
+
         <div className="flex-grow bg-base-300">
           <iframe src={src} title="Resume" className="w-full h-full border-none" />
         </div>
