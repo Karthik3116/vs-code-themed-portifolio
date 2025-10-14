@@ -17,8 +17,8 @@ const componentMap = {
   "Home.jsx": <Home />,
   "About.txt": <About />,
   "Projects.zip": <Projects />,
-  "Contact.info": <Contact />,
   "Profiles.json": <Profiles />,
+  "Contact.info": <Contact />,
   "Settings.config": <SettingsPage />
 };
 

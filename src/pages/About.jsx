@@ -23,82 +23,7 @@ import {
 
 // --- New Achievements Components ---
 
-const LeetCodeStats = () => (
-    <div className="p-4 bg-base-100 rounded-lg text-sm">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Left Column: Profile & Stats */}
-            <div className="md:col-span-1 space-y-4">
-                <div className="p-4 bg-base-300 rounded-lg">
-                    <h4 className="font-bold text-base-content mb-2">Community Stats</h4>
-                    <ul className="space-y-1 text-base-content/70">
-                        <li className="flex justify-between"><span>Views:</span> <span className="font-mono">253</span></li>
-                        <li className="flex justify-between"><span>Solutions:</span> <span className="font-mono">22</span></li>
-                        <li className="flex justify-between"><span>Reputation:</span> <span className="font-mono">90</span></li>
-                    </ul>
-                </div>
-                <div className="p-4 bg-base-300 rounded-lg">
-                    <h4 className="font-bold text-base-content mb-2">Contest Rating</h4>
-                    <p className="text-3xl font-bold text-primary font-mono">1,695</p>
-                    <p className="text-xs text-base-content/60">Top 13.28%</p>
-                </div>
-                 <div className="p-4 bg-base-300 rounded-lg">
-                    <h4 className="font-bold text-base-content mb-2">Problems Solved</h4>
-                     <div className="flex justify-between items-center">
-                        <span className="text-green-400">Easy</span>
-                        <span className="font-mono font-semibold">261<span className="text-xs text-base-content/50">/905</span></span>
-                     </div>
-                     <div className="flex justify-between items-center">
-                        <span className="text-yellow-400">Medium</span>
-                        <span className="font-mono font-semibold">265<span className="text-xs text-base-content/50">/1927</span></span>
-                     </div>
-                     <div className="flex justify-between items-center">
-                        <span className="text-red-400">Hard</span>
-                        <span className="font-mono font-semibold">24<span className="text-xs text-base-content/50">/874</span></span>
-                     </div>
-                </div>
-            </div>
 
-            {/* Right Column: Skills */}
-            <div className="md:col-span-2 p-4 bg-base-300 rounded-lg">
-                <h4 className="font-bold text-base-content mb-3">Top Skills</h4>
-                <div className="space-y-3">
-                    <div>
-                        <h5 className="text-xs font-semibold text-primary mb-1">ADVANCED</h5>
-                        <div className="flex flex-wrap gap-2">
-                            <span className="badge badge-outline">Dynamic Programming</span>
-                            <span className="badge badge-outline">Backtracking</span>
-                            <span className="badge badge-outline">Union Find</span>
-                        </div>
-                    </div>
-                     <div>
-                        <h5 className="text-xs font-semibold text-primary mb-1">INTERMEDIATE</h5>
-                        <div className="flex flex-wrap gap-2">
-                            <span className="badge badge-outline">Hash Table</span>
-                            <span className="badge badge-outline">Math</span>
-                            <span className="badge badge-outline">Depth-First Search</span>
-                        </div>
-                    </div>
-                     <div>
-                        <h5 className="text-xs font-semibold text-primary mb-1">FUNDAMENTAL</h5>
-                        <div className="flex flex-wrap gap-2">
-                            <span className="badge badge-outline">Array</span>
-                            <span className="badge badge-outline">String</span>
-                            <span className="badge badge-outline">Sorting</span>
-                        </div>
-                    </div>
-                </div>
-                 <div className="mt-4 pt-4 border-t border-base-content/10">
-                    <h4 className="font-bold text-base-content mb-2">Languages</h4>
-                    <div className="flex items-center gap-4 text-base-content/70">
-                        <span>Java: <span className="font-mono">508</span></span>
-                        <span>C++: <span className="font-mono">23</span></span>
-                        <span>MySQL: <span className="font-mono">19</span></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-);
 
 const ProjectsShowcase = () => {
     const projects = [
@@ -128,57 +53,10 @@ const ProjectsShowcase = () => {
     );
 };
 
-const HackathonAchievement = () => (
-     <div className="p-4 bg-base-100 rounded-lg text-sm h-full flex items-center justify-center">
-        <div className="text-center bg-base-300 p-8 rounded-lg shadow-inner">
-            <Trophy className="mx-auto w-12 h-12 text-yellow-400 mb-4" />
-            <h4 className="font-bold text-lg text-primary">Hackathon Finalist</h4>
-            <p className="text-base-content/80 mt-2 max-w-md mx-auto">
-                Finalist at <span className="font-semibold">HASCKAVVY Hackathon</span>, where I built and pitched a brain tumor classification model for MRI scans.
-            </p>
-        </div>
-    </div>
-);
 
 
-const AchievementsCarousel = () => {
-    const [activeTab, setActiveTab] = useState('leetcode');
 
-    const tabs = {
-        leetcode: { label: 'Competitive Programming', component: <LeetCodeStats />, icon: <Code/> },
-        
-        hackathon: { label: 'Hackathons', component: <HackathonAchievement />, icon: <Trophy/> },
-    };
 
-    return (
-        <div className="bg-base-200 border border-base-content/10 rounded-2xl p-6">
-            <h2 className="text-xl font-bold text-base-content mb-6 flex items-center gap-3">
-                <Star className="w-5 h-5 text-primary" /> Achievements
-            </h2>
-            
-            <div className="flex flex-wrap items-center border-b border-base-content/10 mb-4">
-                {Object.entries(tabs).map(([key, {label, icon}]) => (
-                    <button 
-                        key={key}
-                        onClick={() => setActiveTab(key)}
-                        className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                            activeTab === key 
-                            ? 'border-primary text-primary' 
-                            : 'border-transparent text-base-content/60 hover:text-base-content'
-                        }`}
-                    >
-                        {React.cloneElement(icon, { size: 16 })}
-                        {label}
-                    </button>
-                ))}
-            </div>
-
-            <div>
-                {tabs[activeTab].component}
-            </div>
-        </div>
-    );
-}
 
 // --- Main About Component ---
 
@@ -249,7 +127,7 @@ const About = () => {
         </section>
 
         {/* --- NEW Achievements Carousel replaces Timeline --- */}
-        <AchievementsCarousel />
+         
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-3"> {/* Made skills section full width */}

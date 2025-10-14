@@ -2,44 +2,133 @@
 <html lang="en" data-theme="dark">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="referrer" content="no-referrer-when-downgrade" />
 
-  <!-- Primary Meta Tags -->
-  <title>Karthik | Full Stack Developer Portfolio</title>
-  <meta name="title" content="Karthik | Full Stack Developer Portfolio" />
-  <meta name="description" content="Portfolio of Karthik - Full Stack Developer, AI/ML Enthusiast, and Open Source Contributor." />
-  <meta name="keywords" content="Karthik, developer portfolio, full stack developer, React, Node.js, AI, ML, open source, karthik.top" />
-  <meta name="author" content="Karthik" />
-  <link rel="canonical" href="https://karthik.top" />
+  <!-- Primary -->
+  <title>Karthik Kethavath — Full Stack Developer (React & Node.js) | Portfolio</title>
+  <meta name="title" content="Karthik Kethavath | Full Stack Developer, AI/ML Enthusiast, Open Source Contributor" />
+  <meta name="description" content="Portfolio of Karthik Kethavath — Full Stack Developer (React, Node.js). Explore projects, resume, open-source contributions and contact information." />
+  <meta name="keywords" content="Karthik, Kethavath, Full Stack Developer, React, Node.js, Portfolio, AI, ML, Open Source" />
+  <meta name="author" content="Karthik Kethavath" />
+  <link rel="canonical" href="https://karthik.top/" />
 
-  <!-- Theme -->
+  <!-- Robots -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+  <!-- Theme & mobile -->
   <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-title" content="Karthik" />
+  <link rel="manifest" href="/site.webmanifest" />
 
-  <!-- Favicon -->
+  <!-- Favicons (place actual files in /public) -->
+  <link rel="icon" href="/favicon.ico" />
   <link rel="icon" type="image/svg+xml" href="/symb.svg" />
-  <link rel="apple-touch-icon" href="/symb.svg" />
-  <link rel="shortcut icon" href="/symb.svg" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/symb.png" />
 
-  <!-- Open Graph / Facebook -->
+  <!-- Preconnect / Performance -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Preload custom font (optional) -->
+  <link rel="preload" href="/fonts/Inter-Variable.woff2" as="font" type="font/woff2" crossorigin />
+
+  <!-- Open Graph (Facebook, LinkedIn etc.) -->
+  <meta property="og:locale" content="en_US" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://karthik.top" />
-  <meta property="og:title" content="Karthik | Full Stack Developer Portfolio" />
-  <meta property="og:description" content="Welcome to the official portfolio of Karthik, a Full Stack Developer and AI/ML Enthusiast." />
-  <meta property="og:image" content="https://karthik.top/preview.png" /> <!-- Place preview.png in public/ -->
+  <meta property="og:site_name" content="Karthik — Full Stack Developer" />
+  <meta property="og:url" content="https://karthik.top/" />
+  <meta property="og:title" content="Karthik Kethavath — Full Stack Developer" />
+  <meta property="og:description" content="React & Node.js projects, AI/ML experiments, and open-source contributions by Karthik Kethavath." />
+  <!-- Use a hosted image (1200x630 recommended). Replace with your image URL -->
+  <meta property="og:image" content="https://karthik.top/profile.png" />
+  <meta property="og:image:secure_url" content="https://karthik.top/profile.png" />
+  <meta property="og:image:alt" content="Karthik — Full Stack Developer portfolio preview" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content="https://karthik.top" />
-  <meta name="twitter:title" content="Karthik | Full Stack Developer Portfolio" />
-  <meta name="twitter:description" content="Official portfolio of Karthik, Full Stack Developer and AI/ML Enthusiast." />
-  <meta name="twitter:image" content="https://karthik.top/preview.png" />
+  <meta name="twitter:site" content="@YOUR_TWITTER_HANDLE" />
+  <meta name="twitter:creator" content="@YOUR_TWITTER_HANDLE" />
+  <meta name="twitter:title" content="Karthik Kethavath — Full Stack Developer" />
+  <meta name="twitter:description" content="React & Node.js projects, AI/ML experiments, and open-source contributions by Karthik." />
+  <meta name="twitter:image" content="https://karthik.top/profile.png" />
 
+  <!-- Hreflang (if you have multi-language support) -->
+  <!-- <link rel="alternate" href="https://karthik.top/" hreflang="en" /> -->
+
+  <!-- Structured data (JSON-LD): Person + Website + Breadcrumb -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://karthik.top/#person",
+        "name": "Karthik Kethavath",
+        "url": "https://karthik.top/",
+        "sameAs": [
+          "https://github.com/karthik3116",
+          "https://www.linkedin.com/in/kethavathkartheek",
+          "https://twitter.com/srk"
+        ],
+        "jobTitle": "Full Stack Developer",
+        "description": "Full Stack Developer specialized in React and Node.js. Interested in AI/ML and open source.",
+        "image": "https://karthik.top/profile.png"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://karthik.top/#website",
+        "url": "https://karthik.top/",
+        "name": "Karthik — Full Stack Developer",
+        "publisher": {
+          "@id": "https://karthik.top/#person"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://karthik.top/#homepage",
+        "url": "https://karthik.top/",
+        "inLanguage": "en-US",
+        "name": "Karthik — Full Stack Developer Portfolio",
+        "description": "Portfolio of Karthik Kethavath — React & Node.js projects and open-source."
+      }
+    ]
+  }
+  </script>
+
+  <!-- CSS & critical styles (keep minimal inline critical CSS for above-the-fold content if possible) -->
+  <link rel="stylesheet" href="/styles/main.css" />
+  <!-- If using a client bundle (SPA), still consider prerendering critical meta per route on server. -->
 </head>
 
 <body>
+  <noscript>
+    <div style="padding:16px;background:#111;color:#fff">
+      JavaScript is required to view this site. Please enable JavaScript or view the
+      <a href="/static-home.html" style="color:#4fd1c5">static version</a>.
+    </div>
+  </noscript>
+
   <div id="root"></div>
+
+  <!-- Site scripts -->
   <script type="module" src="/src/main.jsx"></script>
+
+  <!-- Optional: small performance & indexing helper (defer loading analytics) -->
+  <script>
+    // Defer loading analytics until after interactive
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        const s = document.createElement('script');
+        s.src = '/analytics.js';
+        s.async = true;
+        document.body.appendChild(s);
+      }, 1500);
+    });
+  </script>
 </body>
 
 </html>
