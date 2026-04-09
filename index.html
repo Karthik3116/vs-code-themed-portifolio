@@ -59,7 +59,7 @@
   <!-- Hreflang (if you have multi-language support) -->
   <!-- <link rel="alternate" href="https://karthik.top/" hreflang="en" /> -->
 
-  <!-- Structured data (JSON-LD): Person + Website + Breadcrumb -->
+  <!-- Structured data (JSON-LD): Person + Website + Pages + SiteNavigationElement -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -83,8 +83,11 @@
         "@id": "https://karthik.top/#website",
         "url": "https://karthik.top/",
         "name": "Karthik — Full Stack Developer",
-        "publisher": {
-          "@id": "https://karthik.top/#person"
+        "publisher": { "@id": "https://karthik.top/#person" },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://karthik.top/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
         }
       },
       {
@@ -93,7 +96,32 @@
         "url": "https://karthik.top/",
         "inLanguage": "en-US",
         "name": "Karthik — Full Stack Developer Portfolio",
-        "description": "Portfolio of Karthik Kethavath — React & Node.js projects and open-source."
+        "description": "Portfolio of Karthik Kethavath — React & Node.js projects and open-source.",
+        "isPartOf": { "@id": "https://karthik.top/#website" },
+        "about": { "@id": "https://karthik.top/#person" }
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Main Navigation",
+        "url": "https://karthik.top/",
+        "hasPart": [
+          { "@type": "WebPage", "name": "Home", "url": "https://karthik.top/home" },
+          { "@type": "WebPage", "name": "About", "url": "https://karthik.top/about" },
+          { "@type": "WebPage", "name": "Projects", "url": "https://karthik.top/projects" },
+          { "@type": "WebPage", "name": "Profiles", "url": "https://karthik.top/profiles" },
+          { "@type": "WebPage", "name": "Contact", "url": "https://karthik.top/contact" },
+          { "@type": "WebPage", "name": "Settings", "url": "https://karthik.top/settings" }
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://karthik.top/" },
+          { "@type": "ListItem", "position": 2, "name": "About", "item": "https://karthik.top/about" },
+          { "@type": "ListItem", "position": 3, "name": "Projects", "item": "https://karthik.top/projects" },
+          { "@type": "ListItem", "position": 4, "name": "Profiles", "item": "https://karthik.top/profiles" },
+          { "@type": "ListItem", "position": 5, "name": "Contact", "item": "https://karthik.top/contact" }
+        ]
       }
     ]
   }
@@ -117,18 +145,7 @@
   <!-- Site scripts -->
   <script type="module" src="/src/main.jsx"></script>
 
-  <!-- Optional: small performance & indexing helper (defer loading analytics) -->
-  <script>
-    // Defer loading analytics until after interactive
-    window.addEventListener('load', function () {
-      setTimeout(function () {
-        const s = document.createElement('script');
-        s.src = '/analytics.js';
-        s.async = true;
-        document.body.appendChild(s);
-      }, 1500);
-    });
-  </script>
+  <!-- Analytics handled by @vercel/analytics React component -->
 </body>
 
 </html>

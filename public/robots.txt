@@ -1,4 +1,11 @@
 User-agent: *
 Allow: /
+Allow: /home
+Allow: /about
+Allow: /projects
+Allow: /contact
+Allow: /profiles
+Allow: /settings
+Disallow: /insights
 
-Sitemap: https://www.karthik.top/sitemap.xml
+Sitemap: https://karthik.top/sitemap.xml
