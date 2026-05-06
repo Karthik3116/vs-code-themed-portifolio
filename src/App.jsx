@@ -13,6 +13,7 @@ import VSCodeLayout from "./pages/VSCodeLayout";
 import BottomBar from './components/BottomBar';
 import MobileLayout from './pages/MobileLayout';
 import NotFound from './pages/NotFound';
+import Access from './pages/Access';
 import { trackPageVisit } from './utils/routeConfig';
 
 /* ─── Visit Tracker ─── */
@@ -70,8 +71,8 @@ const App = () => {
             <Route path="contact" element={<></>} />
             <Route path="settings" element={<></>} />
             <Route path="insights" element={<></>} />
-            <Route path="details" element={<></>} />
           </Route>
+          <Route path="details" element={<Access />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

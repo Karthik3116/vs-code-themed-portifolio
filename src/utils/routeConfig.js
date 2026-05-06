@@ -7,7 +7,6 @@ export const routeToTab = {
   '/contact': 'Contact.info',
   '/settings': 'Settings.config',
   '/insights': 'Insights.log',
-  '/details': 'Status.log',
 };
 
 export const tabToRoute = {
@@ -18,7 +17,6 @@ export const tabToRoute = {
   'Contact.info': '/contact',
   'Settings.config': '/settings',
   'Insights.log': '/insights',
-  'Status.log': '/details',
 };
 
 export const isValidRoute = (path) => path in routeToTab;

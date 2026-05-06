@@ -7,7 +7,6 @@ import Contact from './Contact';
 import SettingsPage from './SettingsPage';
 import Profiles from './Profiles';
 import Insights from './Insights';
-import Details from './Details';
 import TopBar from "../components/TopBar";
 import Sidebar from "../components/Sidebar";
 import TabBar from "../components/TabBar";
@@ -25,7 +24,6 @@ const componentMap = {
   "Contact.info": <Contact />,
   "Settings.config": <SettingsPage />,
   "Insights.log": <Insights />,
-  "Status.log": <Details />,
 };
 
 const VSCodeLayout = () => {

@@ -118,7 +118,7 @@ const EntryCard = ({ entry, index }) => {
 
 const CurlBlock = () => {
   const [copied, setCopied] = useState(false);
-  const cmd = `curl -X POST https://karthik.top/api/status \\
+  const cmd = `curl -X POST https://www.karthik.top/api/status \\
   -H "Content-Type: application/json" \\
   -d '{"status":"alive","service":"my-service"}'`;
 
@@ -186,7 +186,7 @@ const Details = () => {
           <h1 className="text-xl font-semibold text-[#4fc1ff] mb-1">Remote Status Feed</h1>
           <p className="text-[#858585] text-sm">
             Any service can POST JSON to{' '}
-            <span className="text-[#9cdcfe]">karthik.top/api/status</span>. Entries appear here, newest first.
+            <span className="text-[#9cdcfe]">www.karthik.top/api/status</span>. Entries appear here, newest first.
           </p>
         </div>
 
